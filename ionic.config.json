@@ -1,0 +1,8 @@
+{
+  "name": "Soporte",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "d5410575"
+}
