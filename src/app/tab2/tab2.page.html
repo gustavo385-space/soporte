@@ -1,17 +1,78 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 2
+<ion-header class="ion-no-border header-glow">
+  <ion-toolbar style="--background: transparent;">
+    <ion-title style="color: #ffffff; font-weight: 800; font-size: 1.25rem;">
+      Licenciamiento & Software
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding-horizontal" style="--background: #050608;">
+  <!-- Segment Switcher -->
+  <div class="custom-segment" style="margin-top: 10px; margin-bottom: 20px;">
+    <button [class.active]="activeSegment === 'catalogo'" (click)="activeSegment = 'catalogo'">
+      Catálogo Empresarial
+    </button>
+    <button [class.active]="activeSegment === 'mis_licencias'" (click)="activeSegment = 'mis_licencias'">
+      Licencias Activas ({{ activeLicenses.length }})
+    </button>
+  </div>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <!-- CATALOG TAB -->
+  <div *ngIf="activeSegment === 'catalogo'">
+    <div style="margin-bottom: 16px;">
+      <p style="color: #94a3b8; font-size: 0.88rem; margin: 0;">
+        Adquiere o renueva licencias corporativas oficiales con facturación consolidada y soporte técnico directo.
+      </p>
+    </div>
+
+    <div class="catalog-list">
+      <div *ngFor="let item of catalog" class="glass-card catalog-card">
+        <div style="display: flex; gap: 14px; align-items: flex-start;">
+          <div class="icon-box">
+            <ion-icon [name]="item.icono || 'cube-outline'" style="font-size: 28px; color: #00f2fe;"></ion-icon>
+          </div>
+          <div style="flex: 1;">
+            <span style="font-size: 0.72rem; font-weight: 800; color: #00f2fe; background: rgba(0,242,254,0.1); padding: 2px 8px; border-radius: 6px;">
+              {{ item.fabricante }}
+            </span>
+            <h3 style="color: #ffffff; font-weight: 800; font-size: 1.05rem; margin: 4px 0;">{{ item.nombre }}</h3>
+            <p style="color: #cbd5e1; font-size: 0.82rem; margin: 0 0 10px 0;">Incluye: {{ item.incluye }}</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;">
+              <span style="color: #34d399; font-weight: 700; font-size: 0.9rem;">{{ item.precioUnitario }}</span>
+              <ion-button size="small" class="btn-neon" (click)="requestLicense(item)">
+                Solicitar
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVE LICENSES TAB -->
+  <div *ngIf="activeSegment === 'mis_licencias'">
+    <div *ngIf="activeLicenses.length === 0" style="text-align: center; padding: 40px;" class="glass-card">
+      <ion-icon name="key-outline" style="font-size: 48px; color: #64748b;"></ion-icon>
+      <h3 style="color: #ffffff; margin-top: 8px;">Sin licencias activas</h3>
+      <p style="color: #94a3b8; font-size: 0.85rem;">No tienes suscripciones registradas actualmente.</p>
+    </div>
+
+    <div *ngFor="let lic of activeLicenses" class="glass-card" style="margin: 0 0 14px 0 !important;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+        <span class="status-badge resuelto">{{ lic.estado }}</span>
+        <span style="color: #00f2fe; font-weight: 700; font-size: 0.85rem;">Qty: {{ lic.cantidad }} usuarios</span>
+      </div>
+
+      <h3 style="color: #ffffff; font-weight: 800; font-size: 1.1rem; margin: 0 0 8px 0;">{{ lic.nombre }}</h3>
+
+      <div style="background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; font-family: monospace; font-size: 0.82rem; color: #38bdf8; border: 1px dashed rgba(56,189,248,0.3); margin-bottom: 10px;">
+        Clave: {{ lic.claveLicencia }}
+      </div>
+
+      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8;">
+        <span>Vence: {{ lic.fechaVencimiento }}</span>
+        <span style="color: #fbbf24; font-weight: 600;">Suscripción Anual</span>
+      </div>
+    </div>
+  </div>
 </ion-content>

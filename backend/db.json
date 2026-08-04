@@ -1,0 +1,207 @@
+{
+  "users": [
+    {
+      "id": "usr_empresa_1",
+      "email": "contacto@techcorp.com",
+      "name": "TechCorp Logistics S.A.",
+      "role": "empresa",
+      "empresaId": "emp_1",
+      "contacto": "Ing. Carlos Mendoza",
+      "telefono": "+52 55 1234 5678",
+      "plan": "Enterprise VIP"
+    },
+    {
+      "id": "usr_empresa_2",
+      "email": "soporte@innovatech.io",
+      "name": "InnovaTech Solutions",
+      "role": "empresa",
+      "empresaId": "emp_2",
+      "contacto": "Dra. Sofía Ramírez",
+      "telefono": "+52 55 9876 5432",
+      "plan": "Business Pro"
+    },
+    {
+      "id": "usr_tech_1",
+      "email": "admin@soporte.com",
+      "name": "Alex Rivera (Lead DevOps & Support)",
+      "role": "admin",
+      "especialidad": "Redes & Servidores Cloud",
+      "telefono": "+52 55 5555 0101"
+    },
+    {
+      "id": "usr_tech_2",
+      "email": "tecnico@soporte.com",
+      "name": "Roberto Silva (Senior Field Tech)",
+      "role": "tecnico",
+      "especialidad": "Mantenimiento Hardware & Licenciamiento",
+      "telefono": "+52 55 5555 0202"
+    }
+  ],
+  "tickets": [
+    {
+      "id": "TCK-8901",
+      "empresaId": "emp_1",
+      "empresaNombre": "TechCorp Logistics S.A.",
+      "titulo": "Fallo crítico en servidor de base de datos principal",
+      "descripcion": "El servidor SQL principal no responde a las peticiones del sistema ERP desde las 08:30 hrs. Error de timeout de conexión.",
+      "categoria": "Servidores",
+      "prioridad": "critico",
+      "estado": "en_proceso",
+      "tecnicoAsignado": "Alex Rivera (Lead DevOps & Support)",
+      "fechaCreacion": "2026-08-03T09:15:00Z",
+      "fechaActualizacion": "2026-08-03T10:45:00Z",
+      "mensajes": [
+        {
+          "autor": "Ing. Carlos Mendoza",
+          "rol": "empresa",
+          "mensaje": "Requerimos asistencia urgente, las operaciones de almacén están detenidas.",
+          "fecha": "2026-08-03T09:15:00Z"
+        },
+        {
+          "autor": "Alex Rivera",
+          "rol": "admin",
+          "mensaje": "Hola Carlos, estamos realizando diagnóstico remoto del pool de memoria de la BD y reiniciando servicios de cluster.",
+          "fecha": "2026-08-03T09:40:00Z"
+        }
+      ]
+    },
+    {
+      "id": "TCK-8902",
+      "empresaId": "emp_1",
+      "empresaNombre": "TechCorp Logistics S.A.",
+      "titulo": "Solicitud de renovación de 25 licencias Microsoft 365 E5",
+      "descripcion": "Se requiere renovar el lote anual de licencias Office 365 para el departamento de finanzas y operaciones.",
+      "categoria": "Licencias",
+      "prioridad": "media",
+      "estado": "pendiente",
+      "tecnicoAsignado": "Sin Asignar",
+      "fechaCreacion": "2026-08-02T14:20:00Z",
+      "fechaActualizacion": "2026-08-02T14:20:00Z",
+      "mensajes": [
+        {
+          "autor": "Ing. Carlos Mendoza",
+          "rol": "empresa",
+          "mensaje": "Adjunto requerimiento firmado por contabilidad para facturación.",
+          "fecha": "2026-08-02T14:20:00Z"
+        }
+      ]
+    },
+    {
+      "id": "TCK-8903",
+      "empresaId": "emp_2",
+      "empresaNombre": "InnovaTech Solutions",
+      "titulo": "Mantenimiento preventivo programado para 15 Laptops Dell XPS",
+      "descripcion": "Limpieza física de disipadores, pasta térmica y actualización de parches de seguridad de firmware.",
+      "categoria": "Mantenimiento",
+      "prioridad": "baja",
+      "estado": "resuelto",
+      "tecnicoAsignado": "Roberto Silva (Senior Field Tech)",
+      "fechaCreacion": "2026-07-28T11:00:00Z",
+      "fechaActualizacion": "2026-07-30T16:00:00Z",
+      "mensajes": [
+        {
+          "autor": "Roberto Silva",
+          "rol": "tecnico",
+          "mensaje": "Mantenimiento completado satisfactoriamente en las instalaciones del cliente. Reporte de diagnóstico entregado.",
+          "fecha": "2026-07-30T16:00:00Z"
+        }
+      ]
+    }
+  ],
+  "licensesCatalog": [
+    {
+      "id": "lic_1",
+      "nombre": "Microsoft 365 Enterprise E5",
+      "tipo": "Suscripción Anual",
+      "fabricante": "Microsoft",
+      "precioUnitario": "$38.00 /usuario/mes",
+      "incluye": "Word, Excel, Teams, Defender Endpoint, PowerBI Pro",
+      "icono": "logo-microsoft"
+    },
+    {
+      "id": "lic_2",
+      "nombre": "Kaspersky Endpoint Security Cloud Plus",
+      "tipo": "Antivirus & Firewall",
+      "fabricante": "Kaspersky Lab",
+      "precioUnitario": "$24.50 /dispositivo/año",
+      "incluye": "Protección contra Ransomware, Control Web, EDR Cloud",
+      "icono": "shield-checkmark-outline"
+    },
+    {
+      "id": "lic_3",
+      "nombre": "Windows Server 2025 Datacenter",
+      "tipo": "Licencia Perpetua Por Cores",
+      "fabricante": "Microsoft",
+      "precioUnitario": "$6,150.00 /16 Cores",
+      "incluye": "Máquinas virtuales ilimitadas, Storage Spaces Direct, Shielded VMs",
+      "icono": "server-outline"
+    },
+    {
+      "id": "lic_4",
+      "nombre": "Autodesk AutoCAD Architecture 2026",
+      "tipo": "Suscripción Anual",
+      "fabricante": "Autodesk",
+      "precioUnitario": "$1,975.00 /año",
+      "incluye": "Diseño 2D/3D especializado, Cloud Rendering, Mobile App Access",
+      "icono": "cube-outline"
+    }
+  ],
+  "activeLicenses": [
+    {
+      "id": "act_lic_101",
+      "empresaId": "emp_1",
+      "nombre": "Microsoft 365 Enterprise E5",
+      "cantidad": 25,
+      "claveLicencia": "XXXXX-MW982-PL019-KJS88-39201",
+      "fechaVencimiento": "2026-09-15",
+      "estado": "Activa"
+    },
+    {
+      "id": "act_lic_102",
+      "empresaId": "emp_1",
+      "nombre": "Kaspersky Endpoint Security",
+      "cantidad": 40,
+      "claveLicencia": "KASP-99201-EC911-PRO88",
+      "fechaVencimiento": "2026-12-01",
+      "estado": "Activa"
+    }
+  ],
+  "equipment": [
+    {
+      "id": "eq_01",
+      "empresaId": "emp_1",
+      "codigoActivo": "EQ-SRV-01",
+      "tipo": "Servidor Rack 2U",
+      "marcaModelo": "Dell PowerEdge R750",
+      "ubicacion": "Rack A-04 (Data Center Principal)",
+      "especificaciones": "2x Xeon Gold 6330 / 128GB RAM / 4x 1.92TB NVMe SSD",
+      "ultimoMantenimiento": "2026-06-15",
+      "proximoMantenimiento": "2026-12-15",
+      "estado": "Operativo"
+    },
+    {
+      "id": "eq_02",
+      "empresaId": "emp_1",
+      "codigoActivo": "EQ-SW-02",
+      "tipo": "Switch Gestionable Layer 3",
+      "marcaModelo": "Cisco Catalyst 9300 48-Port PoE+",
+      "ubicacion": "Rack B-01 (Piso 2 Oficinas)",
+      "especificaciones": "48 puertos Gigabit + 4x 10G Uplinks / Stackwise",
+      "ultimoMantenimiento": "2026-05-10",
+      "proximoMantenimiento": "2026-11-10",
+      "estado": "Operativo"
+    },
+    {
+      "id": "eq_03",
+      "empresaId": "emp_1",
+      "codigoActivo": "EQ-UPS-01",
+      "tipo": "Sistema de Respaldos UPS 6kVA",
+      "marcaModelo": "APC Smart-UPS RT 6000VA",
+      "ubicacion": "Cuarto de Comunicaciones",
+      "especificaciones": "Banco de baterías externo / Módulo SNMP",
+      "ultimoMantenimiento": "2026-07-01",
+      "proximoMantenimiento": "2026-10-01",
+      "estado": "Atención Requerida"
+    }
+  ]
+}

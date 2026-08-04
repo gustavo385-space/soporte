@@ -1,0 +1,108 @@
+.login-wrapper {
+  max-width: 440px;
+  margin: 40px auto 20px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo-box {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.glow-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+  margin-bottom: 16px;
+}
+
+.app-title {
+  color: #ffffff;
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.app-subtitle {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.role-switcher {
+  display: flex;
+  background: #0d1017;
+  border-radius: 14px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+}
+
+.role-switcher button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.role-switcher button.active {
+  background: rgba(0, 242, 254, 0.15);
+  color: #00f2fe;
+  box-shadow: 0 4px 12px rgba(0, 242, 254, 0.15);
+}
+
+.role-card {
+  h3 {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 8px 0 6px 0;
+  }
+  p {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin: 0;
+  }
+}
+
+.role-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #00f2fe;
+  background: rgba(0, 242, 254, 0.1);
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.role-badge.tech {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.custom-input-item {
+  --background: #0d1017;
+  --color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+}

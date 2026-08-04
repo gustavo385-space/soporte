@@ -1,17 +1,101 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 3
+<ion-header class="ion-no-border header-glow">
+  <ion-toolbar style="--background: transparent;">
+    <ion-title style="color: #ffffff; font-weight: 800; font-size: 1.25rem;">
+      Equipos & Perfil Corporativo
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding-horizontal" style="--background: #050608;">
+  <!-- Segment Switcher -->
+  <div class="custom-segment" style="margin-top: 10px; margin-bottom: 20px;">
+    <button [class.active]="activeSegment === 'equipos'" (click)="activeSegment = 'equipos'">
+      Inventario de Equipos ({{ equipment.length }})
+    </button>
+    <button [class.active]="activeSegment === 'perfil'" (click)="activeSegment = 'perfil'">
+      Perfil & Ajustes
+    </button>
+  </div>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <!-- EQUIPMENT INVENTORY TAB -->
+  <div *ngIf="activeSegment === 'equipos'">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div>
+        <p style="color: #94a3b8; font-size: 0.85rem; margin: 0;">
+          Infraestructura de hardware en programa de mantenimiento preventivo.
+        </p>
+      </div>
+      <ion-button size="small" class="btn-neon" (click)="addEquipmentModal()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Registrar
+      </ion-button>
+    </div>
+
+    <div *ngIf="isLoading" style="text-align: center; padding: 40px;">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+    </div>
+
+    <div *ngIf="!isLoading" class="equipment-list">
+      <div *ngFor="let eq of equipment" class="glass-card eq-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-weight: 800; color: #00f2fe; font-size: 0.85rem;">{{ eq.codigoActivo }}</span>
+          <span class="status-badge" [ngClass]="eq.estado === 'Operativo' ? 'resuelto' : 'pendiente'">
+            {{ eq.estado }}
+          </span>
+        </div>
+
+        <h3 style="color: #ffffff; font-weight: 800; font-size: 1.1rem; margin: 0 0 4px 0;">{{ eq.marcaModelo }}</h3>
+        <p style="color: #cbd5e1; font-size: 0.85rem; margin: 0 0 10px 0;">{{ eq.tipo }} • {{ eq.ubicacion }}</p>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px;">
+          <strong style="color: #e2e8f0;">Specs:</strong> {{ eq.especificaciones }}
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.78rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;">
+          <div>
+            <span style="color: #64748b; display: block;">Último Mantenimiento:</span>
+            <span style="color: #34d399; font-weight: 600;">{{ eq.ultimoMantenimiento }}</span>
+          </div>
+          <div>
+            <span style="color: #64748b; display: block;">Próxima Revisión:</span>
+            <span style="color: #fbbf24; font-weight: 600;">{{ eq.proximoMantenimiento }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE & SETTINGS TAB -->
+  <div *ngIf="activeSegment === 'perfil'">
+    <div class="glass-card" style="margin: 0 0 20px 0 !important; text-align: center; padding: 24px 16px;">
+      <div style="width: 70px; height: 70px; border-radius: 20px; background: rgba(0,242,254,0.1); border: 1px solid #00f2fe; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center;">
+        <ion-icon name="business-outline" style="font-size: 36px; color: #00f2fe;"></ion-icon>
+      </div>
+
+      <h2 style="color: #ffffff; font-weight: 800; margin: 0 0 4px 0;">{{ authService.currentUserValue?.name }}</h2>
+      <p style="color: #00f2fe; font-weight: 700; font-size: 0.85rem; margin: 0 0 16px 0;">
+        {{ authService.currentUserValue?.plan || 'Plan Técnico Personalizado' }}
+      </p>
+
+      <div style="text-align: left; background: #0d1017; padding: 14px; border-radius: 12px; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.06);">
+        <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+          <span style="color: #64748b;">Correo:</span>
+          <span style="color: #ffffff; font-weight: 600;">{{ authService.currentUserValue?.email }}</span>
+        </div>
+        <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+          <span style="color: #64748b;">Contacto Directo:</span>
+          <span style="color: #ffffff; font-weight: 600;">{{ authService.currentUserValue?.contacto || 'Mesa de Ayuda' }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: #64748b;">Soporte 24/7 VIP:</span>
+          <span style="color: #34d399; font-weight: 700;">Habilitado</span>
+        </div>
+      </div>
+
+      <ion-button expand="block" color="danger" fill="outline" style="margin-top: 20px; --border-radius: 12px;" routerLink="/login">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        Cerrar Sesión / Cambiar Cuenta
+      </ion-button>
+    </div>
+  </div>
 </ion-content>

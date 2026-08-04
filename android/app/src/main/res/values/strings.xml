@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Soporte IT Enterprise</string>
+    <string name="title_activity_main">Soporte IT Enterprise</string>
+    <string name="package_name">com.soporte.enterprise</string>
+    <string name="custom_url_scheme">com.soporte.enterprise</string>
+</resources>

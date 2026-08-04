@@ -1,17 +1,105 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+<ion-header class="ion-no-border header-glow">
+  <ion-toolbar style="--background: transparent;">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 16px 4px 16px;">
+      <div>
+        <p style="margin: 0; color: #00f2fe; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px;">
+          {{ authService.isEmpresa ? 'PORTAL EMPRESARIAL' : 'PANEL CONTROL IT' }}
+        </p>
+        <h1 style="margin: 2px 0 0 0; color: #ffffff; font-size: 1.35rem; font-weight: 800;">
+          {{ authService.currentUserValue?.name }}
+        </h1>
+      </div>
+      <ion-chip style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0; font-weight: 600;" routerLink="/login">
+        <ion-icon name="swap-horizontal-outline" style="color: #00f2fe;"></ion-icon>
+        <ion-label style="font-size: 0.75rem;">Cambiar Rol</ion-label>
+      </ion-chip>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding-horizontal" style="--background: #050608;">
+  <!-- Stats Summary Grid -->
+  <div *ngIf="stats" class="stats-grid">
+    <div class="stat-card blue">
+      <ion-icon name="headset-outline" class="stat-icon"></ion-icon>
+      <span class="stat-number">{{ stats.totalTickets }}</span>
+      <span class="stat-label">Solicitudes Totales</span>
+    </div>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <div class="stat-card amber">
+      <ion-icon name="time-outline" class="stat-icon"></ion-icon>
+      <span class="stat-number">{{ stats.enProceso + stats.pendientes }}</span>
+      <span class="stat-label">En Atención</span>
+    </div>
+
+    <div class="stat-card emerald">
+      <ion-icon name="checkmark-done-circle-outline" class="stat-icon"></ion-icon>
+      <span class="stat-number">{{ stats.resueltos }}</span>
+      <span class="stat-label">Resueltos</span>
+    </div>
+  </div>
+
+  <!-- Quick Action: Create Ticket for Company -->
+  <div *ngIf="authService.isEmpresa" style="margin: 16px 0;">
+    <button (click)="openNewTicketModal()" class="btn-create-ticket">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="plus-icon-box">
+          <ion-icon name="add-outline" style="font-size: 26px; color: #000000;"></ion-icon>
+        </div>
+        <div style="text-align: left;">
+          <h3 style="margin: 0; color: #ffffff; font-size: 1.05rem; font-weight: 800;">Solicitar Soporte Técnico</h3>
+          <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 0.8rem;">Crear nuevo ticket para tu empresa</p>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward-outline" style="color: #00f2fe;"></ion-icon>
+    </button>
+  </div>
+
+  <!-- Filter Segment -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin: 20px 0 12px 0;">
+    <h2 style="color: #ffffff; font-size: 1.1rem; font-weight: 800; margin: 0;">
+      {{ authService.isEmpresa ? 'Tus Tickets de Soporte' : 'Cola Global de Tickets' }}
+    </h2>
+  </div>
+
+  <div class="custom-segment">
+    <button [class.active]="selectedFilter === 'todos'" (click)="selectedFilter = 'todos'">Todos</button>
+    <button [class.active]="selectedFilter === 'pendiente'" (click)="selectedFilter = 'pendiente'">Pendientes</button>
+    <button [class.active]="selectedFilter === 'en_proceso'" (click)="selectedFilter = 'en_proceso'">En Proceso</button>
+    <button [class.active]="selectedFilter === 'resuelto'" (click)="selectedFilter = 'resuelto'">Resueltos</button>
+  </div>
+
+  <!-- Tickets List -->
+  <div *ngIf="isLoading" style="text-align: center; padding: 40px;">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p style="color: #94a3b8; font-size: 0.85rem;">Cargando solicitudes...</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredTickets.length === 0" style="text-align: center; padding: 40px;" class="glass-card">
+    <ion-icon name="file-tray-outline" style="font-size: 48px; color: #64748b;"></ion-icon>
+    <h3 style="color: #ffffff; margin-top: 8px;">Sin solicitudes</h3>
+    <p style="color: #94a3b8; font-size: 0.85rem;">No hay tickets registrados en esta categoría.</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="tickets-list">
+    <div *ngFor="let t of filteredTickets" class="ticket-card glass-card" (click)="openTicket(t)">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span class="ticket-id">{{ t.id }}</span>
+        <span class="status-badge" [ngClass]="t.estado">
+          {{ t.estado.replace('_', ' ') }}
+        </span>
+      </div>
+
+      <h3 class="ticket-title">{{ t.titulo }}</h3>
+      <p class="ticket-desc">{{ t.descripcion }}</p>
+
+      <div class="ticket-footer">
+        <span class="category-chip">{{ t.categoria }}</span>
+        <span style="color: #94a3b8; font-size: 0.78rem;">
+          <ion-icon name="time-outline" style="vertical-align: middle; margin-right: 4px; color: #00f2fe;"></ion-icon>
+          {{ t.fechaCreacion | date:'shortDate' }}
+        </span>
+      </div>
+    </div>
+  </div>
 </ion-content>

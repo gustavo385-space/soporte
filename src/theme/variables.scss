@@ -1,2 +1,63 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+/* Ionic Theme Variables - Dark Pitch Black Theme */
+
+:root {
+  /** Primary Accent - Electric Blue / Cyan **/
+  --ion-color-primary: #00f2fe;
+  --ion-color-primary-rgb: 0, 242, 254;
+  --ion-color-primary-contrast: #000000;
+  --ion-color-primary-contrast-rgb: 0, 0, 0;
+  --ion-color-primary-shade: #00d5e0;
+  --ion-color-primary-tint: #1af3fe;
+
+  /** Secondary Accent - Glowing Indigo **/
+  --ion-color-secondary: #4facfe;
+  --ion-color-secondary-rgb: 79, 172, 254;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade: #4597df;
+  --ion-color-secondary-tint: #61b4fe;
+
+  /** Tertiary Accent - Electric Purple **/
+  --ion-color-tertiary: #7f00ff;
+  --ion-color-tertiary-rgb: 127, 0, 255;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+
+  /** Success - Vivid Emerald **/
+  --ion-color-success: #10b981;
+  --ion-color-success-rgb: 16, 185, 129;
+  --ion-color-success-contrast: #000000;
+
+  /** Warning - Neon Amber **/
+  --ion-color-warning: #f59e0b;
+  --ion-color-warning-rgb: 245, 158, 11;
+  --ion-color-warning-contrast: #000000;
+
+  /** Danger - Bright Crimson **/
+  --ion-color-danger: #ef4444;
+  --ion-color-danger-rgb: 239, 68, 68;
+  --ion-color-danger-contrast: #ffffff;
+
+  /** Backgrounds - Pure Black & Very Dark Slate **/
+  --ion-background-color: #050608;
+  --ion-background-color-rgb: 5, 6, 8;
+  --ion-text-color: #ffffff;
+  --ion-text-color-rgb: 255, 255, 255;
+
+  /** Item / Card Backgrounds **/
+  --ion-item-background: #0f1219;
+  --ion-card-background: #0f1219;
+
+  /** Toolbar Background **/
+  --ion-toolbar-background: #090b10;
+  --ion-toolbar-text-color: #ffffff;
+  --ion-toolbar-border-color: rgba(255, 255, 255, 0.08);
+
+  /** Tab Bar **/
+  --ion-tab-bar-background: #080a0f;
+  --ion-tab-bar-border-color: rgba(255, 255, 255, 0.08);
+  --ion-tab-bar-color: #64748b;
+  --ion-tab-bar-color-selected: #00f2fe;
+
+  --ion-font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}

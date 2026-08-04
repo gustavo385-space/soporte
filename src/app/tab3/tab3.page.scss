@@ -1,0 +1,10 @@
+.equipment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 24px;
+}
+
+.eq-card {
+  margin: 0 !important;
+}

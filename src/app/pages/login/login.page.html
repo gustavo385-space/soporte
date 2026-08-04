@@ -1,0 +1,77 @@
+<ion-content class="ion-padding" style="--background: #050608;">
+  <div class="login-wrapper">
+    <div class="logo-box">
+      <div class="glow-avatar">
+        <ion-icon name="hardware-chip-outline" style="font-size: 42px; color: #00f2fe;"></ion-icon>
+      </div>
+      <h1 class="app-title">Soporte IT Enterprise</h1>
+      <p class="app-subtitle">Gestión Tecnológica & Mantenimiento Empresarial</p>
+    </div>
+
+    <!-- Role Switcher -->
+    <div class="role-switcher">
+      <button 
+        [class.active]="activeTab === 'empresa'" 
+        (click)="selectRole('empresa')" 
+        type="button">
+        <ion-icon name="business-outline"></ion-icon>
+        Empresa Cliente
+      </button>
+      <button 
+        [class.active]="activeTab === 'admin'" 
+        (click)="selectRole('admin')" 
+        type="button">
+        <ion-icon name="shield-checkmark-outline"></ion-icon>
+        Panel Técnico / Admin
+      </button>
+    </div>
+
+    <!-- Dynamic Description Box -->
+    <div class="role-card glass-card">
+      <div *ngIf="activeTab === 'empresa'">
+        <span class="role-badge">MODO CLIENTE EMPRESARIAL</span>
+        <h3>Acceso TechCorp Logistics S.A.</h3>
+        <p>Solicita soporte en tiempo real, gestiona licencias de software y mantén el inventario de tus servidores y equipos.</p>
+      </div>
+
+      <div *ngIf="activeTab === 'admin'">
+        <span class="role-badge tech">MODO INGENIERO / ADMIN</span>
+        <h3>Acceso Panel de Control IT</h3>
+        <p>Gestiona solicitudes entrantes, asigna ingenieros de campo, actualiza estados y administra el catálogo global.</p>
+      </div>
+    </div>
+
+    <form (ngSubmit)="login()" style="margin-top: 24px;">
+      <div style="margin-bottom: 16px;">
+        <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; display: block;">
+          Correo Electrónico Corporativo
+        </label>
+        <ion-item lines="none" class="custom-input-item">
+          <ion-icon name="mail-outline" slot="start" style="color: #00f2fe; margin-right: 8px;"></ion-icon>
+          <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
+        </ion-item>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; display: block;">
+          Contraseña
+        </label>
+        <ion-item lines="none" class="custom-input-item">
+          <ion-icon name="lock-closed-outline" slot="start" style="color: #00f2fe; margin-right: 8px;"></ion-icon>
+          <ion-input type="password" value="••••••••••••" required></ion-input>
+        </ion-item>
+      </div>
+
+      <ion-button expand="block" type="submit" class="btn-neon" style="height: 52px; font-size: 1rem; margin-top: 10px;">
+        Iniciar Sesión Demo
+        <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+      </ion-button>
+    </form>
+
+    <div style="text-align: center; margin-top: 30px;">
+      <p style="color: #64748b; font-size: 0.8rem;">
+        Plataforma Segura con Encriptación SSL 256-bit • v2.5.0
+      </p>
+    </div>
+  </div>
+</ion-content>
