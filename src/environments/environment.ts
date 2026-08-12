@@ -9,7 +9,7 @@ export const environment = {
   // LAN de tu PC (ej: 'http://192.168.1.100:3000/api') o 'http://10.0.2.2:3000/api'
   // si usás el emulador de Android. Debe coincidir con lo que pusiste en
   // network_security_config.xml.
-  apiUrl: 'http://localhost:3000/api'
+  apiUrl: 'http://localhost:3000'
 };
 
 /*
