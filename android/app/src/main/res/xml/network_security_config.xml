@@ -15,14 +15,14 @@
     tener HTTPS real y no necesitás nada de esto.
 -->
 <network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
     <domain-config cleartextTrafficPermitted="true">
-        <!-- Emulador Android -->
-        <domain includeSubdomains="false">10.0.2.2</domain>
-
-        <!-- Reemplazá esta IP por la de tu PC en tu red WiFi -->
-        <domain includeSubdomains="false">10.9.204.134:3000</domain>
-
-        <!-- Si tu router asigna otro rango (ej. 192.168.0.x), agregá esa IP también -->
-        <!-- <domain includeSubdomains="false">192.168.0.XXX</domain> -->
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">10.9.204.134</domain>
+        <domain includeSubdomains="true">localhost</domain>
     </domain-config>
 </network-security-config>

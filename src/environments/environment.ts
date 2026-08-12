@@ -2,14 +2,13 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const defaultHost = (typeof window !== 'undefined' && window.location.hostname && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
+  ? window.location.hostname
+  : '10.9.204.134';
+
 export const environment = {
   production: false,
-  // Para probar en el navegador (ng serve / ionic serve): dejá localhost.
-  // Para probar en un teléfono físico o emulador: cambiá esto por la IP
-  // LAN de tu PC (ej: 'http://192.168.1.100:3000/api') o 'http://10.0.2.2:3000/api'
-  // si usás el emulador de Android. Debe coincidir con lo que pusiste en
-  // network_security_config.xml.
-  apiUrl: 'http://localhost:3000'
+  apiUrl: `http://${defaultHost}:3000`
 };
 
 /*
