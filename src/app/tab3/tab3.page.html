@@ -6,7 +6,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding-horizontal" style="--background: #050608;">
+<ion-content class="ion-padding-horizontal" style="--background: #0A0E14;">
   <!-- Segment Switcher -->
   <div class="custom-segment" style="margin-top: 10px; margin-bottom: 20px;">
     <button [class.active]="activeSegment === 'equipos'" (click)="activeSegment = 'equipos'">
@@ -21,7 +21,7 @@
   <div *ngIf="activeSegment === 'equipos'">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
       <div>
-        <p style="color: #94a3b8; font-size: 0.85rem; margin: 0;">
+        <p style="color: #98A2B3; font-size: 0.85rem; margin: 0;">
           Infraestructura de hardware en programa de mantenimiento preventivo.
         </p>
       </div>
@@ -38,7 +38,7 @@
     <div *ngIf="!isLoading" class="equipment-list">
       <div *ngFor="let eq of equipment" class="glass-card eq-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span style="font-weight: 800; color: #00f2fe; font-size: 0.85rem;">{{ eq.codigoActivo }}</span>
+          <span style="font-weight: 800; color: #2AD9C2; font-size: 0.85rem;">{{ eq.codigoActivo }}</span>
           <span class="status-badge" [ngClass]="eq.estado === 'Operativo' ? 'resuelto' : 'pendiente'">
             {{ eq.estado }}
           </span>
@@ -47,18 +47,18 @@
         <h3 style="color: #ffffff; font-weight: 800; font-size: 1.1rem; margin: 0 0 4px 0;">{{ eq.marcaModelo }}</h3>
         <p style="color: #cbd5e1; font-size: 0.85rem; margin: 0 0 10px 0;">{{ eq.tipo }} • {{ eq.ubicacion }}</p>
 
-        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px;">
+        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; font-size: 0.8rem; color: #98A2B3; margin-bottom: 10px;">
           <strong style="color: #e2e8f0;">Specs:</strong> {{ eq.especificaciones }}
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.78rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;">
           <div>
-            <span style="color: #64748b; display: block;">Último Mantenimiento:</span>
-            <span style="color: #34d399; font-weight: 600;">{{ eq.ultimoMantenimiento }}</span>
+            <span style="color: #6B7684; display: block;">Último Mantenimiento:</span>
+            <span style="color: #4ADE80; font-weight: 600;">{{ eq.ultimoMantenimiento }}</span>
           </div>
           <div>
-            <span style="color: #64748b; display: block;">Próxima Revisión:</span>
-            <span style="color: #fbbf24; font-weight: 600;">{{ eq.proximoMantenimiento }}</span>
+            <span style="color: #6B7684; display: block;">Próxima Revisión:</span>
+            <span style="color: #F5C24C; font-weight: 600;">{{ eq.proximoMantenimiento }}</span>
           </div>
         </div>
       </div>
@@ -68,27 +68,27 @@
   <!-- PROFILE & SETTINGS TAB -->
   <div *ngIf="activeSegment === 'perfil'">
     <div class="glass-card" style="margin: 0 0 20px 0 !important; text-align: center; padding: 24px 16px;">
-      <div style="width: 70px; height: 70px; border-radius: 20px; background: rgba(0,242,254,0.1); border: 1px solid #00f2fe; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center;">
-        <ion-icon name="business-outline" style="font-size: 36px; color: #00f2fe;"></ion-icon>
+      <div style="width: 70px; height: 70px; border-radius: 20px; background: rgba(42, 217, 194,0.1); border: 1px solid #2AD9C2; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center;">
+        <ion-icon name="business-outline" style="font-size: 36px; color: #2AD9C2;"></ion-icon>
       </div>
 
       <h2 style="color: #ffffff; font-weight: 800; margin: 0 0 4px 0;">{{ authService.currentUserValue?.name }}</h2>
-      <p style="color: #00f2fe; font-weight: 700; font-size: 0.85rem; margin: 0 0 16px 0;">
+      <p style="color: #2AD9C2; font-weight: 700; font-size: 0.85rem; margin: 0 0 16px 0;">
         {{ authService.currentUserValue?.plan || 'Plan Técnico Personalizado' }}
       </p>
 
-      <div style="text-align: left; background: #0d1017; padding: 14px; border-radius: 12px; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.06);">
+      <div style="text-align: left; background: #121923; padding: 14px; border-radius: 12px; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.06);">
         <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
-          <span style="color: #64748b;">Correo:</span>
+          <span style="color: #6B7684;">Correo:</span>
           <span style="color: #ffffff; font-weight: 600;">{{ authService.currentUserValue?.email }}</span>
         </div>
         <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
-          <span style="color: #64748b;">Contacto Directo:</span>
+          <span style="color: #6B7684;">Contacto Directo:</span>
           <span style="color: #ffffff; font-weight: 600;">{{ authService.currentUserValue?.contacto || 'Mesa de Ayuda' }}</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
-          <span style="color: #64748b;">Soporte 24/7 VIP:</span>
-          <span style="color: #34d399; font-weight: 700;">Habilitado</span>
+          <span style="color: #6B7684;">Soporte 24/7 VIP:</span>
+          <span style="color: #4ADE80; font-weight: 700;">Habilitado</span>
         </div>
       </div>
 

@@ -1,19 +1,19 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar style="--background: #0d1017; --color: #ffffff;">
-    <ion-title style="font-weight: 800; font-size: 1.1rem; color: #00f2fe;">
+  <ion-toolbar style="--background: #121923; --color: #ffffff;">
+    <ion-title style="font-weight: 800; font-size: 1.1rem; color: #2AD9C2;">
       Nueva Solicitud de Soporte
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()" style="--color: #94a3b8;">
+      <ion-button (click)="closeModal()" style="--color: #98A2B3;">
         <ion-icon name="close-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" style="--background: #050608;">
+<ion-content class="ion-padding" style="--background: #0A0E14;">
   <div style="margin-bottom: 20px;">
-    <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0;">
+    <p style="color: #98A2B3; font-size: 0.9rem; margin-top: 0;">
       Describe la incidencia técnica o el requerimiento para tu empresa. Un ingeniero especializado será asignado de inmediato.
     </p>
   </div>
@@ -23,7 +23,7 @@
       <label style="color: #e2e8f0; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; display: block;">
         Asunto / Título de la Solicitud *
       </label>
-      <ion-item lines="none" style="--background: #0d1017; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+      <ion-item lines="none" style="--background: #121923; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
         <ion-input [(ngModel)]="titulo" name="titulo" placeholder="Ej: Falla en red WiFi de oficina central" required></ion-input>
       </ion-item>
     </div>
@@ -33,7 +33,7 @@
         <label style="color: #e2e8f0; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; display: block;">
           Categoría
         </label>
-        <ion-item lines="none" style="--background: #0d1017; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+        <ion-item lines="none" style="--background: #121923; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
           <ion-select [(ngModel)]="categoria" name="categoria" interface="popover">
             <ion-select-option value="Soporte Técnico">Soporte Técnico</ion-select-option>
             <ion-select-option value="Servidores">Servidores / Cloud</ion-select-option>
@@ -48,7 +48,7 @@
         <label style="color: #e2e8f0; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; display: block;">
           Nivel de Urgencia
         </label>
-        <ion-item lines="none" style="--background: #0d1017; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+        <ion-item lines="none" style="--background: #121923; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
           <ion-select [(ngModel)]="prioridad" name="prioridad" interface="popover">
             <ion-select-option value="baja">Baja (Normal)</ion-select-option>
             <ion-select-option value="media">Media (Urgente)</ion-select-option>
@@ -63,7 +63,7 @@
       <label style="color: #e2e8f0; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; display: block;">
         Detalles del Incidente *
       </label>
-      <ion-item lines="none" style="--background: #0d1017; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+      <ion-item lines="none" style="--background: #121923; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
         <ion-textarea [(ngModel)]="descripcion" name="descripcion" rows="5" placeholder="Explique qué equipos están afectados, mensajes de error o síntomas observados..." required></ion-textarea>
       </ion-item>
     </div>

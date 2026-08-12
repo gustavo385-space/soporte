@@ -19,19 +19,19 @@
 }
 
 body {
-  background-color: #050608 !important;
+  background-color: #0A0E14 !important;
   color: #ffffff !important;
 }
 
 ion-content {
-  --background: #050608;
+  --background: #0A0E14;
   --color: #ffffff;
 }
 
 ion-toolbar {
-  --background: #080a0f;
+  --background: #0A0E14;
   --color: #ffffff;
-  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color: #232E3B;
 }
 
 ion-title {
@@ -41,39 +41,39 @@ ion-title {
 }
 
 ion-card {
-  --background: #0d1017;
+  --background: #121923;
   --color: #ffffff;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border-radius: 14px;
+  border: 1px solid #232E3B;
+  box-shadow: none;
   margin: 12px 16px;
 }
 
-/* Glassmorphism Card Utility */
+/* Flat surface card (replaces the old glass/blur look) */
 .glass-card {
-  background: rgba(15, 20, 30, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 18px;
+  background: #121923;
+  border: 1px solid #232E3B;
+  border-radius: 14px;
   padding: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
 }
 
-/* Glowing Neon Button */
+/* Primary flat button (was .btn-neon gradient) */
 .btn-neon {
-  --background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-  --color: #000000;
+  --background: #2AD9C2;
+  --background-hover: #4FE3D0;
+  --background-activated: #22C4AE;
+  --color: #08201C;
   --border-radius: 12px;
   font-weight: 700;
   letter-spacing: 0.2px;
   text-transform: none;
-  box-shadow: 0 4px 20px rgba(0, 242, 254, 0.35);
+  box-shadow: none;
 }
 
 .btn-outline-neon {
-  --border-color: #00f2fe;
-  --color: #00f2fe;
+  --border-color: #2AD9C2;
+  --color: #2AD9C2;
   --border-radius: 12px;
   font-weight: 600;
   text-transform: none;
@@ -85,7 +85,7 @@ ion-card {
   align-items: center;
   gap: 6px;
   padding: 4px 12px;
-  border-radius: 20px;
+  border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -93,33 +93,33 @@ ion-card {
 }
 
 .status-badge.pendiente {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: rgba(245, 166, 35, 0.15);
+  color: #F5A623;
+  border: 1px solid rgba(245, 166, 35, 0.3);
 }
 
 .status-badge.en_proceso {
-  background: rgba(0, 242, 254, 0.15);
-  color: #38bdf8;
-  border: 1px solid rgba(0, 242, 254, 0.3);
+  background: rgba(42, 217, 194, 0.15);
+  color: #2AD9C2;
+  border: 1px solid rgba(42, 217, 194, 0.3);
 }
 
 .status-badge.resuelto {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ECC71;
+  border: 1px solid rgba(46, 204, 113, 0.3);
 }
 
 .status-badge.critico {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(255, 75, 75, 0.15);
+  color: #FF4B4B;
+  border: 1px solid rgba(255, 75, 75, 0.3);
 }
 
 /* Category Badges */
 .category-chip {
-  background: rgba(255, 255, 255, 0.06);
-  color: #94a3b8;
+  background: #1B2531;
+  color: #98A2B3;
   border-radius: 8px;
   padding: 4px 10px;
   font-size: 0.8rem;
@@ -128,35 +128,36 @@ ion-card {
 
 /* Input Fields styling */
 ion-item {
-  --background: #0d1017;
+  --background: #121923;
   --color: #ffffff;
-  --border-color: rgba(255, 255, 255, 0.08);
-  --highlight-color-focused: #00f2fe;
+  --border-color: #232E3B;
+  --highlight-color-focused: #2AD9C2;
   border-radius: 12px;
   margin-bottom: 12px;
 }
 
 ion-input, ion-textarea, ion-select {
   --color: #ffffff;
-  --placeholder-color: #64748b;
+  --placeholder-color: #6B7684;
   --placeholder-opacity: 1;
 }
 
 /* Tab Bar Styling */
 ion-tab-bar {
-  --background: #080a0f;
-  --border-color: rgba(255, 255, 255, 0.08);
+  --background: #0A0E14;
+  --border-color: #232E3B;
 }
 
 ion-tab-button {
-  --color: #64748b;
-  --color-selected: #00f2fe;
+  --color: #6B7684;
+  --color-selected: #2AD9C2;
   font-weight: 600;
 }
 
-/* Header Gradient Glow */
+/* Header (flat, no gradient glow) */
 .header-glow {
-  background: linear-gradient(180deg, rgba(0, 242, 254, 0.05) 0%, rgba(5, 6, 8, 0) 100%);
+  background: #0A0E14;
+  border-bottom: 1px solid #232E3B;
 }
 
 /* Animations */
@@ -167,4 +168,18 @@ ion-tab-button {
 
 .animate-fade-in {
   animation: fadeIn 0.35s ease-out forwards;
+}
+
+/* Circular avatar utility (design-system.json > components.avatars) */
+.avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #ffffff;
+  background: #1F6E63;
 }

@@ -6,7 +6,7 @@
 }
 
 .stat-card {
-  background: #0d1017;
+  background: #121923;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
   padding: 12px 10px;
@@ -21,9 +21,9 @@
   margin-bottom: 4px;
 }
 
-.stat-card.blue .stat-icon { color: #00f2fe; }
-.stat-card.amber .stat-icon { color: #fbbf24; }
-.stat-card.emerald .stat-icon { color: #34d399; }
+.stat-card.blue .stat-icon { color: #2AD9C2; }
+.stat-card.amber .stat-icon { color: #F5C24C; }
+.stat-card.emerald .stat-icon { color: #4ADE80; }
 
 .stat-number {
   color: #ffffff;
@@ -32,7 +32,7 @@
 }
 
 .stat-label {
-  color: #94a3b8;
+  color: #98A2B3;
   font-size: 0.7rem;
   font-weight: 600;
   margin-top: 2px;
@@ -40,30 +40,35 @@
 
 .btn-create-ticket {
   width: 100%;
-  background: linear-gradient(135deg, rgba(0, 242, 254, 0.12) 0%, rgba(79, 172, 254, 0.06) 100%);
-  border: 1px solid rgba(0, 242, 254, 0.35);
-  border-radius: 16px;
+  background: #121923;
+  border: 1px solid #232E3B;
+  border-radius: 14px;
   padding: 14px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.btn-create-ticket:active {
+  border-color: #2AD9C2;
 }
 
 .plus-icon-box {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: #00f2fe;
+  background: #2AD9C2;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px rgba(0, 242, 254, 0.4);
+  box-shadow: none;
 }
 
 .custom-segment {
   display: flex;
-  background: #0d1017;
+  background: #121923;
   border-radius: 12px;
   padding: 3px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -75,7 +80,7 @@
   flex: 1;
   background: transparent;
   border: none;
-  color: #64748b;
+  color: #6B7684;
   padding: 8px 6px;
   border-radius: 9px;
   font-weight: 700;
@@ -86,8 +91,8 @@
 }
 
 .custom-segment button.active {
-  background: rgba(0, 242, 254, 0.15);
-  color: #00f2fe;
+  background: rgba(42, 217, 194, 0.15);
+  color: #2AD9C2;
 }
 
 .tickets-list {
@@ -108,7 +113,7 @@
 }
 
 .ticket-id {
-  color: #00f2fe;
+  color: #2AD9C2;
   font-weight: 800;
   font-size: 0.85rem;
   letter-spacing: 0.5px;
@@ -122,7 +127,7 @@
 }
 
 .ticket-desc {
-  color: #94a3b8;
+  color: #98A2B3;
   font-size: 0.85rem;
   line-height: 1.4;
   margin: 0 0 12px 0;
