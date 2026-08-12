@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Esta configuración le dice a Android: "confío en tráfico HTTP sin cifrar
+  (cleartext), pero SOLO hacia estos dominios/IPs específicos".
+  Sin esto, Android bloquea cualquier petición http:// desde API 28 en adelante,
+  y tus llamadas al backend local fallarían silenciosamente (caen al fallback mock).
+
+  IMPORTANTE:
+  - 10.0.2.2 es el alias especial que usa el EMULADOR de Android para
+    referirse a "localhost de tu PC". Úsalo si estás probando en el emulador.
+  - Reemplazá 192.168.1.100 por la IP LAN real de tu computadora si estás
+    probando en un teléfono físico conectado a la misma red WiFi.
+    (Cómo obtenerla: ver instrucciones en el chat)
+  - Esta config es solo para DESARROLLO. Para producción, tu backend debe
+    tener HTTPS real y no necesitás nada de esto.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Emulador Android -->
+        <domain includeSubdomains="false">10.0.2.2</domain>
+
+        <!-- Reemplazá esta IP por la de tu PC en tu red WiFi -->
+        <domain includeSubdomains="false">192.168.1.100</domain>
+
+        <!-- Si tu router asigna otro rango (ej. 192.168.0.x), agregá esa IP también -->
+        <!-- <domain includeSubdomains="false">192.168.0.XXX</domain> -->
+    </domain-config>
+</network-security-config>

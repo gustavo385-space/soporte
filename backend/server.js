@@ -5,6 +5,8 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const HOST = '0.0.0.0'; // Escucha en todas las interfaces de red, no solo localhost,
+                         // así tu teléfono en la misma WiFi puede alcanzarlo por la IP de tu PC
 const DB_PATH = path.join(__dirname, 'db.json');
 
 app.use(cors());
@@ -259,9 +261,28 @@ app.get('/api/stats', (req, res) => {
   return res.json({ success: true, stats });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
+  const os = require('os');
+  const nets = os.networkInterfaces();
+  const lanIps = [];
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+      if (net.family === 'IPv4' && !net.internal) {
+        lanIps.push(net.address);
+      }
+    }
+  }
+
   console.log(`====================================================`);
   console.log(` Servidor Backend Soporte Técnico corriendo en:`);
-  console.log(` http://localhost:${PORT}`);
+  console.log(` http://localhost:${PORT}  (solo desde esta PC)`);
+  if (lanIps.length) {
+    lanIps.forEach(ip => {
+      console.log(` http://${ip}:${PORT}  <-- usá esta IP en environment.ts`);
+      console.log(`                        y en network_security_config.xml`);
+    });
+  } else {
+    console.log(` No se detectó ninguna IP de red local. Verificá tu conexión WiFi.`);
+  }
   console.log(`====================================================`);
 });

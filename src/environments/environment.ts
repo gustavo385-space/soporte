@@ -3,7 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // Para probar en el navegador (ng serve / ionic serve): dejá localhost.
+  // Para probar en un teléfono físico o emulador: cambiá esto por la IP
+  // LAN de tu PC (ej: 'http://192.168.1.100:3000/api') o 'http://10.0.2.2:3000/api'
+  // si usás el emulador de Android. Debe coincidir con lo que pusiste en
+  // network_security_config.xml.
+  apiUrl: 'http://localhost:3000/api'
 };
 
 /*
