@@ -1,9 +1,10 @@
+-- Este archivo ya NO se usa. Ahora los datos viven en Supabase Postgres. Se conserva solo como referencia histórica. --
 {
   "users": [
     {
       "id": "usr_empresa_1",
       "email": "contacto@techcorp.com",
-      "name": "Registro y Asistencia TI REMOTA",
+      "name": "TechCorp Logistics S.A.",
       "role": "empresa",
       "empresaId": "emp_1",
       "contacto": "Ing. Carlos Mendoza",

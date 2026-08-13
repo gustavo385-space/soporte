@@ -32,6 +32,12 @@ log.txt
 # Node
 node_modules/
 **/node_modules/
+
+# Variables de entorno / credenciales - NUNCA subir a git
+.env
+.env.local
+**/.env
+**/.env.local
 npm-debug.log
 yarn-error.log
 

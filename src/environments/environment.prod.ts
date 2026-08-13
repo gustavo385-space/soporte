@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  // En producción esto debería ser la URL real de tu backend desplegado
-  // (Supabase, Railway, Render, etc.) y SIEMPRE con https://
+  // Reemplaza esta URL por la de tu backend desplegado (Render, Railway, etc.)
+  // Debe terminar en /api. Pasos completos en DEPLOY.md
   apiUrl: 'https://tu-backend-en-produccion.com/api'
 };

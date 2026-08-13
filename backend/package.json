@@ -1,7 +1,7 @@
 {
   "name": "soporte-backend",
-  "version": "1.0.0",
-  "description": "API REST Backend para Aplicación de Soporte Técnico a Empresas",
+  "version": "2.0.0",
+  "description": "API REST Backend para Aplicaci\u00f3n de Soporte T\u00e9cnico a Empresas (PostgreSQL / Supabase)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,6 +9,11 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.13.1"
+  },
+  "engines": {
+    "node": ">=18.x"
   }
 }
