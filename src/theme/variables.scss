@@ -1,63 +1,79 @@
-/* Ionic Theme Variables - TechOps Dark Dashboard (design-system.json) */
+/* Ionic Theme Variables - GIJIops "Nexus IT" Light Corporate Theme */
 
 :root {
-  /** Primary Accent - Teal **/
-  --ion-color-primary: #2AD9C2;
-  --ion-color-primary-rgb: 42, 217, 194;
-  --ion-color-primary-contrast: #08201C;
-  --ion-color-primary-contrast-rgb: 8, 32, 28;
-  --ion-color-primary-shade: #22C4AE;
-  --ion-color-primary-tint: #4FE3D0;
+  /** Primary - Deep Navy (nav bars, headings, primary buttons) **/
+  --ion-color-primary: #0D213D;
+  --ion-color-primary-rgb: 13, 33, 61;
+  --ion-color-primary-contrast: #FFFFFF;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #0B1C34;
+  --ion-color-primary-tint: #24384F;
 
-  /** Secondary - Muted neutral (single-accent system, secondary stays low-key) **/
-  --ion-color-secondary: #8A96A3;
-  --ion-color-secondary-rgb: 138, 150, 163;
-  --ion-color-secondary-contrast: #FFFFFF;
-  --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #79838F;
-  --ion-color-secondary-tint: #96A1AD;
+  /** Secondary - Vibrant Turquoise (accents, active states, CTAs) **/
+  --ion-color-secondary: #2AD9C2;
+  --ion-color-secondary-rgb: 42, 217, 194;
+  --ion-color-secondary-contrast: #003732;
+  --ion-color-secondary-contrast-rgb: 0, 55, 50;
+  --ion-color-secondary-shade: #22C4AE;
+  --ion-color-secondary-tint: #4FE3D0;
 
-  /** Tertiary - kept subdued, not a bright competing hue **/
-  --ion-color-tertiary: #6B7684;
-  --ion-color-tertiary-rgb: 107, 118, 132;
+  /** Tertiary - kept subdued, neutral slate **/
+  --ion-color-tertiary: #44474D;
+  --ion-color-tertiary-rgb: 68, 71, 77;
   --ion-color-tertiary-contrast: #FFFFFF;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
 
   /** Success **/
-  --ion-color-success: #2ECC71;
-  --ion-color-success-rgb: 46, 204, 113;
-  --ion-color-success-contrast: #08201C;
+  --ion-color-success: #1E9E5A;
+  --ion-color-success-rgb: 30, 158, 90;
+  --ion-color-success-contrast: #FFFFFF;
 
   /** Warning - Amber (pending / needs attention) **/
-  --ion-color-warning: #F5A623;
-  --ion-color-warning-rgb: 245, 166, 35;
-  --ion-color-warning-contrast: #08201C;
+  --ion-color-warning: #C77E15;
+  --ion-color-warning-rgb: 199, 126, 21;
+  --ion-color-warning-contrast: #FFFFFF;
 
   /** Danger **/
-  --ion-color-danger: #FF4B4B;
-  --ion-color-danger-rgb: 255, 75, 75;
+  --ion-color-danger: #BA1A1A;
+  --ion-color-danger-rgb: 186, 26, 26;
   --ion-color-danger-contrast: #FFFFFF;
 
-  /** Backgrounds - Navy-black canvas (never pure #000) **/
-  --ion-background-color: #0A0E14;
-  --ion-background-color-rgb: 10, 14, 20;
-  --ion-text-color: #FFFFFF;
-  --ion-text-color-rgb: 255, 255, 255;
+  /** Brand palette tokens (Nexus IT Management design system) **/
+  --brand-navy: #0D213D;
+  --brand-navy-deep: #000A1D;
+  --brand-turquoise: #2AD9C2;
+  --brand-turquoise-dim: #5ADACE;
+  --brand-surface: #F8F9FF;
+  --brand-surface-container-low: #EFF4FF;
+  --brand-surface-container: #E5EEFF;
+  --brand-surface-lowest: #FFFFFF;
+  --brand-on-surface: #0B1C30;
+  --brand-on-surface-variant: #5B6472;
+  --brand-outline-variant: #DCE3EE;
+  --brand-secondary-container: #C9F7F0;
+  --brand-on-secondary-container: #00695F;
+
+  /** Backgrounds - Light corporate canvas **/
+  --ion-background-color: #F8F9FF;
+  --ion-background-color-rgb: 248, 249, 255;
+  --ion-text-color: #0B1C30;
+  --ion-text-color-rgb: 11, 28, 48;
 
   /** Item / Card Backgrounds **/
-  --ion-item-background: #121923;
-  --ion-card-background: #121923;
+  --ion-item-background: #FFFFFF;
+  --ion-card-background: #FFFFFF;
 
   /** Toolbar Background **/
-  --ion-toolbar-background: #0A0E14;
-  --ion-toolbar-text-color: #ffffff;
-  --ion-toolbar-border-color: #232E3B;
+  --ion-toolbar-background: #F8F9FF;
+  --ion-toolbar-text-color: #0B1C30;
+  --ion-toolbar-border-color: #DCE3EE;
 
   /** Tab Bar **/
-  --ion-tab-bar-background: #0A0E14;
-  --ion-tab-bar-border-color: #232E3B;
-  --ion-tab-bar-color: #6B7684;
-  --ion-tab-bar-color-selected: #2AD9C2;
+  --ion-tab-bar-background: #FFFFFF;
+  --ion-tab-bar-border-color: #DCE3EE;
+  --ion-tab-bar-color: #75777E;
+  --ion-tab-bar-color-selected: #0D213D;
 
-  --ion-font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ion-font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --brand-font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
 }

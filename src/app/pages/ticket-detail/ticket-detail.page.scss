@@ -5,16 +5,17 @@
 }
 
 .msg-bubble {
-  background: #121923;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
   border-radius: 14px;
   padding: 12px 14px;
   max-width: 88%;
   align-self: flex-start;
+  box-shadow: 0px 4px 12px rgba(13, 33, 61, 0.05);
 }
 
 .msg-bubble.is-me {
-  background: rgba(0, 242, 254, 0.08);
-  border-color: rgba(0, 242, 254, 0.25);
+  background: #E5F9F6;
+  border-color: rgba(42, 217, 194, 0.35);
   align-self: flex-end;
 }

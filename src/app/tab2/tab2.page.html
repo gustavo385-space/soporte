@@ -1,12 +1,17 @@
 <ion-header class="ion-no-border header-glow">
   <ion-toolbar style="--background: transparent;">
-    <ion-title style="color: #ffffff; font-weight: 800; font-size: 1.25rem;">
-      Licenciamiento & Software
-    </ion-title>
+    <div style="display: flex; align-items: center; gap: 10px; padding-left: 4px;">
+      <div class="brand-mark" style="width: 28px; height: 28px;">
+        <img src="assets/brand/logo-mark.svg" alt="GIJIops" />
+      </div>
+      <ion-title style="color: #0B1C30; font-weight: 800; font-size: 1.15rem; padding-left: 0;">
+        Licenciamiento &amp; Software
+      </ion-title>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding-horizontal" style="--background: #0A0E14;">
+<ion-content class="ion-padding-horizontal" style="--background: #F8F9FF;">
   <!-- Segment Switcher -->
   <div class="custom-segment" style="margin-top: 10px; margin-bottom: 20px;">
     <button [class.active]="activeSegment === 'catalogo'" (click)="activeSegment = 'catalogo'">
@@ -20,7 +25,7 @@
   <!-- CATALOG TAB -->
   <div *ngIf="activeSegment === 'catalogo'">
     <div style="margin-bottom: 16px;">
-      <p style="color: #98A2B3; font-size: 0.88rem; margin: 0;">
+      <p style="color: #5B6472; font-size: 0.88rem; margin: 0;">
         Adquiere o renueva licencias corporativas oficiales con facturación consolidada y soporte técnico directo.
       </p>
     </div>
@@ -29,16 +34,16 @@
       <div *ngFor="let item of catalog" class="glass-card catalog-card">
         <div style="display: flex; gap: 14px; align-items: flex-start;">
           <div class="icon-box">
-            <ion-icon [name]="item.icono || 'cube-outline'" style="font-size: 28px; color: #2AD9C2;"></ion-icon>
+            <ion-icon [name]="item.icono || 'cube-outline'" style="font-size: 26px; color: #0D213D;"></ion-icon>
           </div>
           <div style="flex: 1;">
-            <span style="font-size: 0.72rem; font-weight: 800; color: #2AD9C2; background: rgba(42, 217, 194,0.1); padding: 2px 8px; border-radius: 6px;">
+            <span class="fabricante-chip">
               {{ item.fabricante }}
             </span>
-            <h3 style="color: #ffffff; font-weight: 800; font-size: 1.05rem; margin: 4px 0;">{{ item.nombre }}</h3>
-            <p style="color: #cbd5e1; font-size: 0.82rem; margin: 0 0 10px 0;">Incluye: {{ item.incluye }}</p>
-            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;">
-              <span style="color: #4ADE80; font-weight: 700; font-size: 0.9rem;">{{ item.precioUnitario }}</span>
+            <h3 style="color: #0B1C30; font-weight: 800; font-size: 1.05rem; margin: 4px 0;">{{ item.nombre }}</h3>
+            <p style="color: #44474D; font-size: 0.82rem; margin: 0 0 10px 0;">Incluye: {{ item.incluye }}</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #EFF4FF; padding-top: 10px;">
+              <span style="color: #1E9E5A; font-weight: 700; font-size: 0.9rem;">{{ item.precioUnitario }}</span>
               <ion-button size="small" class="btn-neon" (click)="requestLicense(item)">
                 Solicitar
               </ion-button>
@@ -52,26 +57,26 @@
   <!-- ACTIVE LICENSES TAB -->
   <div *ngIf="activeSegment === 'mis_licencias'">
     <div *ngIf="activeLicenses.length === 0" style="text-align: center; padding: 40px;" class="glass-card">
-      <ion-icon name="key-outline" style="font-size: 48px; color: #6B7684;"></ion-icon>
-      <h3 style="color: #ffffff; margin-top: 8px;">Sin licencias activas</h3>
-      <p style="color: #98A2B3; font-size: 0.85rem;">No tienes suscripciones registradas actualmente.</p>
+      <ion-icon name="key-outline" style="font-size: 48px; color: #A5ADBA;"></ion-icon>
+      <h3 style="color: #0B1C30; margin-top: 8px;">Sin licencias activas</h3>
+      <p style="color: #5B6472; font-size: 0.85rem;">No tienes suscripciones registradas actualmente.</p>
     </div>
 
     <div *ngFor="let lic of activeLicenses" class="glass-card" style="margin: 0 0 14px 0 !important;">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
         <span class="status-badge resuelto">{{ lic.estado }}</span>
-        <span style="color: #2AD9C2; font-weight: 700; font-size: 0.85rem;">Qty: {{ lic.cantidad }} usuarios</span>
+        <span style="color: #00695F; font-weight: 700; font-size: 0.85rem;">Qty: {{ lic.cantidad }} usuarios</span>
       </div>
 
-      <h3 style="color: #ffffff; font-weight: 800; font-size: 1.1rem; margin: 0 0 8px 0;">{{ lic.nombre }}</h3>
+      <h3 style="color: #0B1C30; font-weight: 800; font-size: 1.1rem; margin: 0 0 8px 0;">{{ lic.nombre }}</h3>
 
-      <div style="background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; font-family: monospace; font-size: 0.82rem; color: #38bdf8; border: 1px dashed rgba(56,189,248,0.3); margin-bottom: 10px;">
+      <div class="font-mono" style="background: #0D213D; padding: 10px; border-radius: 8px; font-size: 0.82rem; color: #4FE3D0; border: 1px dashed rgba(79,227,208,0.4); margin-bottom: 10px;">
         Clave: {{ lic.claveLicencia }}
       </div>
 
-      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #98A2B3;">
+      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #5B6472;">
         <span>Vence: {{ lic.fechaVencimiento }}</span>
-        <span style="color: #F5C24C; font-weight: 600;">Suscripción Anual</span>
+        <span style="color: #C77E15; font-weight: 600;">Suscripción Anual</span>
       </div>
     </div>
   </div>

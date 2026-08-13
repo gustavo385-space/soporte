@@ -11,47 +11,38 @@
   margin-bottom: 28px;
 }
 
-.glow-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 22px;
-  background: #0E2338;
-  border: 2px solid #2AD9C2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: none;
-  margin-bottom: 16px;
-}
-
 .app-title {
-  color: #ffffff;
-  font-size: 1.7rem;
+  font-size: 2rem;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
+.app-title .accent {
+  color: #2AD9C2;
+}
+
 .app-subtitle {
-  color: #98A2B3;
+  color: #5B6472;
   font-size: 0.9rem;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .role-switcher {
   display: flex;
-  background: #121923;
+  background: #FFFFFF;
   border-radius: 14px;
   padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid #E2E8F0;
   margin-bottom: 20px;
+  box-shadow: 0px 4px 12px rgba(13, 33, 61, 0.05);
 }
 
 .role-switcher button {
   flex: 1;
   background: transparent;
   border: none;
-  color: #6B7684;
+  color: #75777E;
   padding: 10px;
   border-radius: 10px;
   font-weight: 700;
@@ -65,20 +56,22 @@
 }
 
 .role-switcher button.active {
-  background: rgba(42, 217, 194, 0.15);
-  color: #2AD9C2;
-  box-shadow: none;
+  background: #0D213D;
+  color: #ffffff;
 }
 
 .role-card {
+  border-left: 4px solid #2AD9C2;
+  border-radius: 12px;
+
   h3 {
-    color: #ffffff;
+    color: #0B1C30;
     font-size: 1.1rem;
     font-weight: 700;
     margin: 8px 0 6px 0;
   }
   p {
-    color: #98A2B3;
+    color: #5B6472;
     font-size: 0.85rem;
     line-height: 1.4;
     margin: 0;
@@ -88,21 +81,30 @@
 .role-badge {
   font-size: 0.7rem;
   font-weight: 800;
-  color: #2AD9C2;
-  background: rgba(42, 217, 194, 0.1);
+  color: #00695F;
+  background: #C9F7F0;
   padding: 3px 8px;
   border-radius: 6px;
   letter-spacing: 0.5px;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .role-badge.tech {
-  color: #2ECC71;
-  background: rgba(16, 185, 129, 0.1);
+  color: #0D213D;
+  background: #E5EEFF;
+}
+
+.field-label {
+  color: #44474D;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
 }
 
 .custom-input-item {
-  --background: #121923;
-  --color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  --background: #FFFFFF;
+  --color: #0B1C30;
+  border: 1px solid #CBD5E1;
   border-radius: 14px;
 }

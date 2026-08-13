@@ -1,1 +1,22 @@
+.brand-tab-bar {
+  --background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid #DCE3EE;
+  box-shadow: 0px -4px 16px rgba(13, 33, 61, 0.06);
+}
 
+ion-tab-button {
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+}
+
+ion-tab-button.tab-selected {
+  ion-icon, ion-label {
+    color: #0D213D;
+  }
+}
+
+ion-tab-button.tab-selected::before {
+  content: '';
+}

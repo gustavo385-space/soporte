@@ -1,25 +1,27 @@
-<ion-content class="ion-padding" style="--background: #0A0E14;">
+<ion-content class="ion-padding" style="--background: #F8F9FF;">
   <div class="login-wrapper">
     <div class="logo-box">
-      <div class="glow-avatar">
-        <ion-icon name="hardware-chip-outline" style="font-size: 42px; color: #2AD9C2;"></ion-icon>
+      <div class="brand-mark" style="width: 84px; height: 84px; margin: 0 auto 16px auto;">
+        <img src="assets/brand/logo-mark.svg" alt="GIJIops" />
       </div>
-      <h1 class="app-title">Soporte IT Enterprise</h1>
-      <p class="app-subtitle">Gestión Tecnológica & Mantenimiento Empresarial</p>
+      <h1 class="app-title">
+        <span style="color: #0D213D;">GIJI</span><span class="accent">ops</span>
+      </h1>
+      <p class="app-subtitle">Gestión Tecnológica &amp; Mantenimiento Empresarial</p>
     </div>
 
     <!-- Role Switcher -->
     <div class="role-switcher">
-      <button 
-        [class.active]="activeTab === 'empresa'" 
-        (click)="selectRole('empresa')" 
+      <button
+        [class.active]="activeTab === 'empresa'"
+        (click)="selectRole('empresa')"
         type="button">
         <ion-icon name="business-outline"></ion-icon>
         Empresa Cliente
       </button>
-      <button 
-        [class.active]="activeTab === 'admin'" 
-        (click)="selectRole('admin')" 
+      <button
+        [class.active]="activeTab === 'admin'"
+        (click)="selectRole('admin')"
         type="button">
         <ion-icon name="shield-checkmark-outline"></ion-icon>
         Panel Técnico / Admin
@@ -43,7 +45,7 @@
 
     <form (ngSubmit)="login()" style="margin-top: 24px;">
       <div style="margin-bottom: 16px;">
-        <label style="color: #98A2B3; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; display: block;">
+        <label class="field-label">
           Correo Electrónico Corporativo
         </label>
         <ion-item lines="none" class="custom-input-item">
@@ -53,7 +55,7 @@
       </div>
 
       <div style="margin-bottom: 24px;">
-        <label style="color: #98A2B3; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; display: block;">
+        <label class="field-label">
           Contraseña
         </label>
         <ion-item lines="none" class="custom-input-item">
@@ -69,7 +71,7 @@
     </form>
 
     <div style="text-align: center; margin-top: 30px;">
-      <p style="color: #6B7684; font-size: 0.8rem;">
+      <p style="color: #75777E; font-size: 0.8rem;">
         Plataforma Segura con Encriptación SSL 256-bit • v2.5.0
       </p>
     </div>

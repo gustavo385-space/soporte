@@ -12,58 +12,69 @@
 
 @import "./theme/variables.scss";
 
-/* Global Font & Theme Baseline */
+/* Global Font & Theme Baseline - GIJIops Nexus IT Light Theme */
 * {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif !important;
   box-sizing: border-box;
 }
 
+.font-mono, .font-mono * {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace !important;
+}
+
 body {
-  background-color: #0A0E14 !important;
-  color: #ffffff !important;
+  background-color: #F8F9FF !important;
+  color: #0B1C30 !important;
 }
 
 ion-content {
-  --background: #0A0E14;
-  --color: #ffffff;
+  --background: #F8F9FF;
+  --color: #0B1C30;
 }
 
 ion-toolbar {
-  --background: #0A0E14;
-  --color: #ffffff;
-  --border-color: #232E3B;
+  --background: #F8F9FF;
+  --color: #0B1C30;
+  --border-color: #DCE3EE;
 }
 
 ion-title {
   font-weight: 700;
   letter-spacing: -0.3px;
-  color: #ffffff;
+  color: #0B1C30;
 }
 
 ion-card {
-  --background: #121923;
-  --color: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #232E3B;
+  --background: #FFFFFF;
+  --color: #0B1C30;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
   box-shadow: none;
   margin: 12px 16px;
 }
 
-/* Flat surface card (replaces the old glass/blur look) */
+/* Flat surface card - Level 1 elevation (white bg, 1px border, no shadow) */
 .glass-card {
-  background: #121923;
-  border: 1px solid #232E3B;
-  border-radius: 14px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
   padding: 18px;
-  box-shadow: none;
+  box-shadow: 0px 4px 12px rgba(13, 33, 61, 0.05);
 }
 
-/* Primary flat button (was .btn-neon gradient) */
+/* Sticky / overlay header glass effect (12px blur, 80% opacity) */
+.glass-panel {
+  background: rgba(248, 249, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Primary flat button - Deep Navy background, white text */
 .btn-neon {
-  --background: #2AD9C2;
-  --background-hover: #4FE3D0;
-  --background-activated: #22C4AE;
-  --color: #08201C;
+  --background: #0D213D;
+  --background-hover: #16304F;
+  --background-activated: #0B1C34;
+  --color: #ffffff;
   --border-radius: 12px;
   font-weight: 700;
   letter-spacing: 0.2px;
@@ -71,93 +82,96 @@ ion-card {
   box-shadow: none;
 }
 
+/* Ghost / secondary button - Turquoise label, per brand system */
 .btn-outline-neon {
   --border-color: #2AD9C2;
-  --color: #2AD9C2;
+  --color: #00695F;
   --border-radius: 12px;
   font-weight: 600;
   text-transform: none;
 }
 
-/* Custom Status Badges */
+/* Custom Status Badges - low-opacity tinted pills */
 .status-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 4px 12px;
-  border-radius: 8px;
-  font-size: 0.75rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-family: 'JetBrains Mono', monospace !important;
 }
 
 .status-badge.pendiente {
-  background: rgba(245, 166, 35, 0.15);
-  color: #F5A623;
-  border: 1px solid rgba(245, 166, 35, 0.3);
+  background: #F1E7D6;
+  color: #8A5A0A;
+  border: 1px solid rgba(199, 126, 21, 0.25);
 }
 
 .status-badge.en_proceso {
-  background: rgba(42, 217, 194, 0.15);
-  color: #2AD9C2;
-  border: 1px solid rgba(42, 217, 194, 0.3);
+  background: #C9F7F0;
+  color: #00695F;
+  border: 1px solid rgba(42, 217, 194, 0.35);
 }
 
 .status-badge.resuelto {
-  background: rgba(46, 204, 113, 0.15);
-  color: #2ECC71;
-  border: 1px solid rgba(46, 204, 113, 0.3);
+  background: #D7F2E1;
+  color: #157A45;
+  border: 1px solid rgba(30, 158, 90, 0.3);
 }
 
 .status-badge.critico {
-  background: rgba(255, 75, 75, 0.15);
-  color: #FF4B4B;
-  border: 1px solid rgba(255, 75, 75, 0.3);
+  background: #FBDCDC;
+  color: #A31515;
+  border: 1px solid rgba(186, 26, 26, 0.3);
 }
 
 /* Category Badges */
 .category-chip {
-  background: #1B2531;
-  color: #98A2B3;
+  background: #EFF4FF;
+  color: #44474D;
   border-radius: 8px;
   padding: 4px 10px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
+  border: 1px solid #DCE3EE;
 }
 
 /* Input Fields styling */
 ion-item {
-  --background: #121923;
-  --color: #ffffff;
-  --border-color: #232E3B;
+  --background: #FFFFFF;
+  --color: #0B1C30;
+  --border-color: #CBD5E1;
   --highlight-color-focused: #2AD9C2;
   border-radius: 12px;
   margin-bottom: 12px;
 }
 
 ion-input, ion-textarea, ion-select {
-  --color: #ffffff;
-  --placeholder-color: #6B7684;
+  --color: #0B1C30;
+  --placeholder-color: #75777E;
   --placeholder-opacity: 1;
 }
 
-/* Tab Bar Styling */
+/* Tab Bar Styling - floating rounded light bar */
 ion-tab-bar {
-  --background: #0A0E14;
-  --border-color: #232E3B;
+  --background: #FFFFFF;
+  --border-color: #DCE3EE;
 }
 
 ion-tab-button {
-  --color: #6B7684;
-  --color-selected: #2AD9C2;
+  --color: #75777E;
+  --color-selected: #0D213D;
   font-weight: 600;
 }
 
-/* Header (flat, no gradient glow) */
+/* Header (flat, light, subtle divider) */
 .header-glow {
-  background: #0A0E14;
-  border-bottom: 1px solid #232E3B;
+  background: #F8F9FF;
+  border-bottom: 1px solid #DCE3EE;
 }
 
 /* Animations */
@@ -170,7 +184,7 @@ ion-tab-button {
   animation: fadeIn 0.35s ease-out forwards;
 }
 
-/* Circular avatar utility (design-system.json > components.avatars) */
+/* Circular avatar utility */
 .avatar-circle {
   width: 36px;
   height: 36px;
@@ -181,5 +195,30 @@ ion-tab-button {
   font-weight: 700;
   font-size: 0.75rem;
   color: #ffffff;
-  background: #1F6E63;
+  background: #0D213D;
+}
+
+/* Brand logo mark used across headers */
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.brand-wordmark {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-wordmark .accent {
+  color: #2AD9C2;
 }

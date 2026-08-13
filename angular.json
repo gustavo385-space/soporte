@@ -31,8 +31,16 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
-            "scripts": []
+            "styles": [
+              "src/global.scss",
+              "src/theme/variables.scss"
+            ],
+            "scripts": [],
+            "optimization": {
+              "scripts": true,
+              "styles": true,
+              "fonts": false
+            }
           },
           "configurations": {
             "production": {
@@ -111,7 +119,10 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
+            "styles": [
+              "src/global.scss",
+              "src/theme/variables.scss"
+            ],
             "scripts": []
           },
           "configurations": {

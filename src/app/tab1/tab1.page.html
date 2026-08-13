@@ -1,15 +1,20 @@
 <ion-header class="ion-no-border header-glow">
   <ion-toolbar style="--background: transparent;">
     <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 16px 4px 16px;">
-      <div>
-        <p style="margin: 0; color: #2AD9C2; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px;">
-          {{ authService.isEmpresa ? 'PORTAL EMPRESARIAL' : 'PANEL CONTROL IT' }}
-        </p>
-        <h1 style="margin: 2px 0 0 0; color: #ffffff; font-size: 1.35rem; font-weight: 800;">
-          {{ authService.currentUserValue?.name }}
-        </h1>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="brand-mark" style="width: 34px; height: 34px;">
+          <img src="assets/brand/logo-mark.svg" alt="GIJIops" />
+        </div>
+        <div>
+          <p style="margin: 0; color: #00695F; font-size: 0.68rem; font-weight: 800; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace;">
+            {{ authService.isEmpresa ? 'PORTAL EMPRESARIAL' : 'PANEL CONTROL IT' }}
+          </p>
+          <h1 style="margin: 2px 0 0 0; color: #0B1C30; font-size: 1.2rem; font-weight: 800;">
+            {{ authService.currentUserValue?.name }}
+          </h1>
+        </div>
       </div>
-      <ion-chip style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0; font-weight: 600;" routerLink="/login">
+      <ion-chip style="background: #FFFFFF; border: 1px solid #E2E8F0; color: #44474D; font-weight: 600;" routerLink="/login">
         <ion-icon name="swap-horizontal-outline" style="color: #2AD9C2;"></ion-icon>
         <ion-label style="font-size: 0.75rem;">Cambiar Rol</ion-label>
       </ion-chip>
@@ -17,10 +22,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding-horizontal" style="--background: #0A0E14;">
+<ion-content class="ion-padding-horizontal" style="--background: #F8F9FF;">
   <!-- Stats Summary Grid -->
   <div *ngIf="stats" class="stats-grid">
-    <div class="stat-card blue">
+    <div class="stat-card navy">
       <ion-icon name="headset-outline" class="stat-icon"></ion-icon>
       <span class="stat-number">{{ stats.totalTickets }}</span>
       <span class="stat-label">Solicitudes Totales</span>
@@ -44,11 +49,11 @@
     <button (click)="openNewTicketModal()" class="btn-create-ticket">
       <div style="display: flex; align-items: center; gap: 12px;">
         <div class="plus-icon-box">
-          <ion-icon name="add-outline" style="font-size: 26px; color: #000000;"></ion-icon>
+          <ion-icon name="add-outline" style="font-size: 26px; color: #0D213D;"></ion-icon>
         </div>
         <div style="text-align: left;">
-          <h3 style="margin: 0; color: #ffffff; font-size: 1.05rem; font-weight: 800;">Solicitar Soporte Técnico</h3>
-          <p style="margin: 2px 0 0 0; color: #98A2B3; font-size: 0.8rem;">Crear nuevo ticket para tu empresa</p>
+          <h3 style="margin: 0; color: #0B1C30; font-size: 1.05rem; font-weight: 800;">Solicitar Soporte Técnico</h3>
+          <p style="margin: 2px 0 0 0; color: #5B6472; font-size: 0.8rem;">Crear nuevo ticket para tu empresa</p>
         </div>
       </div>
       <ion-icon name="chevron-forward-outline" style="color: #2AD9C2;"></ion-icon>
@@ -57,7 +62,7 @@
 
   <!-- Filter Segment -->
   <div style="display: flex; align-items: center; justify-content: space-between; margin: 20px 0 12px 0;">
-    <h2 style="color: #ffffff; font-size: 1.1rem; font-weight: 800; margin: 0;">
+    <h2 style="color: #0B1C30; font-size: 1.1rem; font-weight: 800; margin: 0;">
       {{ authService.isEmpresa ? 'Tus Tickets de Soporte' : 'Cola Global de Tickets' }}
     </h2>
   </div>
@@ -71,14 +76,14 @@
 
   <!-- Tickets List -->
   <div *ngIf="isLoading" style="text-align: center; padding: 40px;">
-    <ion-spinner name="crescent" color="primary"></ion-spinner>
-    <p style="color: #98A2B3; font-size: 0.85rem;">Cargando solicitudes...</p>
+    <ion-spinner name="crescent" color="secondary"></ion-spinner>
+    <p style="color: #5B6472; font-size: 0.85rem;">Cargando solicitudes...</p>
   </div>
 
   <div *ngIf="!isLoading && filteredTickets.length === 0" style="text-align: center; padding: 40px;" class="glass-card">
-    <ion-icon name="file-tray-outline" style="font-size: 48px; color: #6B7684;"></ion-icon>
-    <h3 style="color: #ffffff; margin-top: 8px;">Sin solicitudes</h3>
-    <p style="color: #98A2B3; font-size: 0.85rem;">No hay tickets registrados en esta categoría.</p>
+    <ion-icon name="file-tray-outline" style="font-size: 48px; color: #A5ADBA;"></ion-icon>
+    <h3 style="color: #0B1C30; margin-top: 8px;">Sin solicitudes</h3>
+    <p style="color: #5B6472; font-size: 0.85rem;">No hay tickets registrados en esta categoría.</p>
   </div>
 
   <div *ngIf="!isLoading" class="tickets-list">
@@ -95,7 +100,7 @@
 
       <div class="ticket-footer">
         <span class="category-chip">{{ t.categoria }}</span>
-        <span style="color: #98A2B3; font-size: 0.78rem;">
+        <span style="color: #5B6472; font-size: 0.78rem;">
           <ion-icon name="time-outline" style="vertical-align: middle; margin-right: 4px; color: #2AD9C2;"></ion-icon>
           {{ t.fechaCreacion | date:'shortDate' }}
         </span>

@@ -1,18 +1,18 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar style="--background: #0A0E14;">
+<ion-header class="ion-no-border header-glow">
+  <ion-toolbar style="--background: #F8F9FF;">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab1" style="--color: #2AD9C2;"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/tab1" style="--color: #0D213D;"></ion-back-button>
     </ion-buttons>
-    <ion-title style="color: #ffffff; font-weight: 700; font-size: 1rem;">
+    <ion-title style="color: #0B1C30; font-weight: 700; font-size: 1rem;">
       Detalle del Ticket {{ ticketId }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" style="--background: #0A0E14;">
+<ion-content class="ion-padding" style="--background: #F8F9FF;">
   <div *ngIf="isLoading" style="text-align: center; padding: 40px;">
-    <ion-spinner name="crescent" color="primary"></ion-spinner>
-    <p style="color: #98A2B3; font-size: 0.9rem;">Cargando información del ticket...</p>
+    <ion-spinner name="crescent" color="secondary"></ion-spinner>
+    <p style="color: #5B6472; font-size: 0.9rem;">Cargando información del ticket...</p>
   </div>
 
   <div *ngIf="!isLoading && ticket">
@@ -25,36 +25,36 @@
         </span>
       </div>
 
-      <h2 style="color: #ffffff; font-size: 1.25rem; font-weight: 800; margin: 0 0 10px 0;">
+      <h2 style="color: #0B1C30; font-size: 1.25rem; font-weight: 800; margin: 0 0 10px 0;">
         {{ ticket.titulo }}
       </h2>
 
-      <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.5; margin: 0 0 16px 0;">
+      <p style="color: #44474D; font-size: 0.9rem; line-height: 1.5; margin: 0 0 16px 0;">
         {{ ticket.descripcion }}
       </p>
 
-      <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem; color: #98A2B3;">
+      <div style="border-top: 1px solid #EFF4FF; padding-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem; color: #5B6472;">
         <div>
-          <span style="display: block; font-weight: 700; color: #6B7684;">Empresa:</span>
-          <span style="color: #e2e8f0;">{{ ticket.empresaNombre }}</span>
+          <span style="display: block; font-weight: 700; color: #75777E;">Empresa:</span>
+          <span style="color: #0B1C30;">{{ ticket.empresaNombre }}</span>
         </div>
         <div>
-          <span style="display: block; font-weight: 700; color: #6B7684;">Ingeniero Asignado:</span>
-          <span style="color: #2AD9C2; font-weight: 600;">{{ ticket.tecnicoAsignado }}</span>
+          <span style="display: block; font-weight: 700; color: #75777E;">Ingeniero Asignado:</span>
+          <span style="color: #00695F; font-weight: 600;">{{ ticket.tecnicoAsignado }}</span>
         </div>
       </div>
     </div>
 
     <!-- Admin Technician Controls (Show only if Admin/Tech) -->
-    <div *ngIf="authService.isAdminOrTech" class="glass-card" style="margin-bottom: 20px; border-color: rgba(42, 217, 194, 0.3);">
-      <h3 style="color: #2AD9C2; font-size: 0.95rem; font-weight: 700; margin: 0 0 10px 0;">
+    <div *ngIf="authService.isAdminOrTech" class="glass-card" style="margin-bottom: 20px; border-left: 4px solid #2AD9C2;">
+      <h3 style="color: #00695F; font-size: 0.95rem; font-weight: 700; margin: 0 0 10px 0;">
         Panel Técnico - Cambiar Estado
       </h3>
-      <div style="display: flex; gap: 8px;">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
         <ion-button size="small" fill="outline" color="warning" (click)="cambiarEstado('pendiente')">
           Pendiente
         </ion-button>
-        <ion-button size="small" fill="outline" color="primary" (click)="cambiarEstado('en_proceso')">
+        <ion-button size="small" fill="outline" color="secondary" (click)="cambiarEstado('en_proceso')">
           En Proceso
         </ion-button>
         <ion-button size="small" fill="solid" color="success" (click)="cambiarEstado('resuelto')">
@@ -64,7 +64,7 @@
     </div>
 
     <!-- Timeline & Message History -->
-    <h3 style="color: #ffffff; font-size: 1rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+    <h3 style="color: #0B1C30; font-size: 1rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
       <ion-icon name="chatbubbles-outline" style="color: #2AD9C2;"></ion-icon>
       Historial y Mensajes de Seguimiento
     </h3>
@@ -72,12 +72,12 @@
     <div class="messages-container">
       <div *ngFor="let msg of ticket.mensajes" class="msg-bubble" [class.is-me]="msg.rol === authService.currentUserValue?.role">
         <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.75rem;">
-          <span style="font-weight: 700;" [style.color]="msg.rol === 'empresa' ? '#38bdf8' : '#4ADE80'">
+          <span style="font-weight: 700;" [style.color]="msg.rol === 'empresa' ? '#0369A1' : '#157A45'">
             {{ msg.autor }} ({{ msg.rol.toUpperCase() }})
           </span>
-          <span style="color: #6B7684;">{{ msg.fecha | date:'shortTime' }}</span>
+          <span style="color: #75777E;">{{ msg.fecha | date:'shortTime' }}</span>
         </div>
-        <p style="color: #f1f5f9; margin: 0; font-size: 0.88rem; line-height: 1.4;">
+        <p style="color: #0B1C30; margin: 0; font-size: 0.88rem; line-height: 1.4;">
           {{ msg.mensaje }}
         </p>
       </div>
@@ -85,11 +85,11 @@
 
     <!-- Message Input Bar -->
     <div style="margin-top: 16px; display: flex; gap: 8px; align-items: center;">
-      <ion-item lines="none" style="flex: 1; --background: #121923; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px;">
+      <ion-item lines="none" style="flex: 1; --background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 14px;">
         <ion-input [(ngModel)]="nuevoMensaje" placeholder="Escriba un mensaje de respuesta..." (keyup.enter)="enviarRespuesta()"></ion-input>
       </ion-item>
       <ion-button class="btn-neon" style="height: 48px; width: 48px; --border-radius: 14px;" (click)="enviarRespuesta()">
-        <ion-icon name="send" slot="icon-only" style="color: #000000;"></ion-icon>
+        <ion-icon name="send" slot="icon-only" style="color: #ffffff;"></ion-icon>
       </ion-button>
     </div>
   </div>
