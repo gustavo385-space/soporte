@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { User } from '../models/models';
 import { environment } from '../../environments/environment';
@@ -14,23 +14,23 @@ export class AuthService {
   public currentUser$: Observable<User | null>;
 
   private mockAdminUser: User = {
-    id: 'usr_admin_master',
+    id: 'usr_admin_gijiops',
     email: 'admin@soporte.com',
-    name: 'Alex Rivera (Admin General)',
+    name: 'GIJIops',
     role: 'admin',
     especialidad: 'Administración Global & DevOps',
     telefono: '+52 55 5555 0101'
   };
 
   private mockEmpresaUser: User = {
-    id: 'usr_empresa_1',
-    email: 'contacto@techcorp.com',
-    name: 'TechCorp Logistics S.A.',
+    id: 'usr_cliente_normal',
+    email: 'usuario@soporte.com',
+    name: 'Usuario Normal (Cliente)',
     role: 'empresa',
     empresaId: 'emp_1',
-    contacto: 'Ing. Carlos Mendoza',
+    contacto: 'Juan Pérez',
     telefono: '+52 55 1234 5678',
-    plan: 'Enterprise VIP'
+    plan: 'Standard Pro'
   };
 
   constructor(private http: HttpClient) {
@@ -60,14 +60,17 @@ export class AuthService {
     return this.currentUserValue?.role === 'admin' || this.currentUserValue?.role === 'tecnico';
   }
 
-  public loginWithEmail(email: string, role?: string): Observable<{ success: boolean; user: User }> {
-    return this.http.post<{ success: boolean; user: User }>(`${this.apiUrl}/auth/login`, { email, role }).pipe(
+  public loginWithEmail(email: string, password?: string, role?: string): Observable<{ success: boolean; user: User; message?: string }> {
+    return this.http.post<{ success: boolean; user: User; message?: string }>(`${this.apiUrl}/auth/login`, { email, password, role }).pipe(
       tap((res) => {
         if (res.success && res.user) {
           this.setUser(res.user);
         }
       }),
-      catchError(() => {
+      catchError((err) => {
+        if (err.status === 401 || err.status === 404) {
+          return throwError(() => err.error?.message || 'Error de credenciales');
+        }
         const user = role === 'admin' ? this.mockAdminUser : this.mockEmpresaUser;
         this.setUser(user);
         return of({ success: true, user });
@@ -76,11 +79,11 @@ export class AuthService {
   }
 
   public loginAsEmpresa(): void {
-    this.loginWithEmail('contacto@techcorp.com', 'empresa').subscribe();
+    this.loginWithEmail('usuario@soporte.com', 'user123', 'empresa').subscribe();
   }
 
   public loginAsAdmin(): void {
-    this.loginWithEmail('admin@soporte.com', 'admin').subscribe();
+    this.loginWithEmail('admin@soporte.com', 'admin123', 'admin').subscribe();
   }
 
   public setUser(user: User): void {

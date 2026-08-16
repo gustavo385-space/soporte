@@ -13,33 +13,39 @@
     <!-- Role Switcher -->
     <div class="role-switcher">
       <button
-        [class.active]="activeTab === 'empresa'"
-        (click)="selectRole('empresa')"
-        type="button">
-        <ion-icon name="business-outline"></ion-icon>
-        Empresa Cliente
-      </button>
-      <button
         [class.active]="activeTab === 'admin'"
         (click)="selectRole('admin')"
         type="button">
         <ion-icon name="shield-checkmark-outline"></ion-icon>
-        Panel Técnico / Admin
+        GIJIops (Admin)
+      </button>
+      <button
+        [class.active]="activeTab === 'empresa'"
+        (click)="selectRole('empresa')"
+        type="button">
+        <ion-icon name="business-outline"></ion-icon>
+        Usuario Normal (Cliente)
       </button>
     </div>
 
-    <!-- Dynamic Description Box -->
+    <!-- Dynamic Description Box with Credentials -->
     <div class="role-card glass-card">
-      <div *ngIf="activeTab === 'empresa'">
-        <span class="role-badge">MODO CLIENTE EMPRESARIAL</span>
-        <h3>Acceso TechCorp Logistics S.A.</h3>
-        <p>Solicita soporte en tiempo real, gestiona licencias de software y mantén el inventario de tus servidores y equipos.</p>
+      <div *ngIf="activeTab === 'admin'">
+        <span class="role-badge tech">MODO ADMINISTRADOR GENERAL</span>
+        <h3>Acceso Administrador: GIJIops</h3>
+        <p style="margin-bottom: 8px;">Gestiona usuarios, licencias, inventarios de hardware y aprueba o finaliza tickets globales con sincronización en PostgreSQL.</p>
+        <div style="background: rgba(42,217,194,0.1); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(42,217,194,0.3); font-size: 0.8rem; color: #0D213D;">
+          🔑 <strong>Email:</strong> admin&#64;soporte.com &bull; <strong>Password:</strong> admin123
+        </div>
       </div>
 
-      <div *ngIf="activeTab === 'admin'">
-        <span class="role-badge tech">MODO INGENIERO / ADMIN</span>
-        <h3>Acceso Panel de Control IT</h3>
-        <p>Gestiona solicitudes entrantes, asigna ingenieros de campo, actualiza estados y administra el catálogo global.</p>
+      <div *ngIf="activeTab === 'empresa'">
+        <span class="role-badge">MODO CLIENTE REAL</span>
+        <h3>Acceso Usuario Normal (Cliente)</h3>
+        <p style="margin-bottom: 8px;">Solicita soporte técnico en tiempo real, adquiere licencias de software y consulta el estado de tu equipamiento.</p>
+        <div style="background: rgba(13,33,61,0.06); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(13,33,61,0.15); font-size: 0.8rem; color: #0D213D;">
+          👤 <strong>Email:</strong> usuario&#64;soporte.com &bull; <strong>Password:</strong> user123
+        </div>
       </div>
     </div>
 
@@ -56,23 +62,24 @@
 
       <div style="margin-bottom: 24px;">
         <label class="field-label">
-          Contraseña
+          Contraseña de Acceso
         </label>
         <ion-item lines="none" class="custom-input-item">
           <ion-icon name="lock-closed-outline" slot="start" style="color: #2AD9C2; margin-right: 8px;"></ion-icon>
-          <ion-input type="password" value="••••••••••••" required></ion-input>
+          <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
         </ion-item>
       </div>
 
-      <ion-button expand="block" type="submit" class="btn-neon" style="height: 52px; font-size: 1rem; margin-top: 10px;">
-        Iniciar Sesión Demo
-        <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+      <ion-button expand="block" type="submit" class="btn-neon" style="height: 52px; font-size: 1rem; margin-top: 10px;" [disabled]="isLoading">
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+        <span *ngIf="!isLoading">Iniciar Sesión en PostgreSQL</span>
+        <ion-icon *ngIf="!isLoading" name="arrow-forward-outline" slot="end"></ion-icon>
       </ion-button>
     </form>
 
     <div style="text-align: center; margin-top: 30px;">
       <p style="color: #75777E; font-size: 0.8rem;">
-        Plataforma Segura con Encriptación SSL 256-bit • v2.5.0
+        Plataforma Segura con Autenticación PostgreSQL Supabase &bull; v2.6.0
       </p>
     </div>
   </div>

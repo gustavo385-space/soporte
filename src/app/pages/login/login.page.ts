@@ -10,8 +10,9 @@ import { ToastController } from '@ionic/angular';
   standalone: false
 })
 export class LoginPage {
-  email: string = 'contacto@techcorp.com';
-  activeTab: 'empresa' | 'admin' = 'empresa';
+  email: string = 'admin@soporte.com';
+  password: string = 'admin123';
+  activeTab: 'empresa' | 'admin' = 'admin';
   isLoading: boolean = false;
 
   constructor(
@@ -23,26 +24,39 @@ export class LoginPage {
   selectRole(role: 'empresa' | 'admin') {
     this.activeTab = role;
     if (role === 'empresa') {
-      this.email = 'contacto@techcorp.com';
+      this.email = 'usuario@soporte.com';
+      this.password = 'user123';
     } else {
       this.email = 'admin@soporte.com';
+      this.password = 'admin123';
     }
   }
 
   async login() {
     this.isLoading = true;
-    this.authService.loginWithEmail(this.email, this.activeTab).subscribe(async (res) => {
-      this.isLoading = false;
-      const user = res.user;
+    this.authService.loginWithEmail(this.email, this.password, this.activeTab).subscribe({
+      next: async (res) => {
+        this.isLoading = false;
+        const user = res.user;
 
-      const toast = await this.toastCtrl.create({
-        message: `Bienvenido Administrador General: ${user?.name}`,
-        duration: 2500,
-        color: 'success'
-      });
-      await toast.present();
+        const toast = await this.toastCtrl.create({
+          message: `Sesión iniciada como ${user?.name} (${user?.role.toUpperCase()})`,
+          duration: 2500,
+          color: 'success'
+        });
+        await toast.present();
 
-      this.router.navigate(['/tabs/tab1']);
+        this.router.navigate(['/tabs/tab1']);
+      },
+      error: async (errMessage) => {
+        this.isLoading = false;
+        const toast = await this.toastCtrl.create({
+          message: typeof errMessage === 'string' ? errMessage : 'Credenciales incorrectas.',
+          duration: 3000,
+          color: 'danger'
+        });
+        await toast.present();
+      }
     });
   }
 }

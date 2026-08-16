@@ -25,8 +25,11 @@ async function initDb() {
         telefono       text,
         plan           text,
         especialidad   text,
+        password       text default '123456',
         created_at     timestamptz not null default now()
       );
+
+      alter table users add column if not exists password text default '123456';
 
       create table if not exists tickets (
         id                   text primary key,
@@ -85,16 +88,17 @@ async function initDb() {
       );
     `);
 
-    // Asegurar usuario Admin General por defecto
-    const userCheck = await pool.query("select * from users where role = 'admin'");
-    if (userCheck.rows.length === 0) {
-      await pool.query(`
-        insert into users (id, email, name, role, empresa_id, contacto, telefono, plan, especialidad)
-        values ('usr_admin_master', 'admin@soporte.com', 'Alex Rivera (Admin General)', 'admin', NULL, 'Administrador Principal', '+52 55 5555 0101', 'Super Admin', 'Administración Global & DevOps')
-        on conflict (id) do nothing;
-      `);
-      console.log('✔ Usuario Admin Master creado en PostgreSQL.');
-    }
+    // Asegurar usuario Admin General 'GIJIops' y usuario Cliente Normal en PostgreSQL
+    await pool.query(`
+      insert into users (id, email, name, role, empresa_id, contacto, telefono, plan, especialidad, password)
+      values ('usr_admin_gijiops', 'admin@soporte.com', 'GIJIops', 'admin', NULL, 'Administrador General', '+52 55 5555 0101', 'Super Admin', 'Administración Global & DevOps', 'admin123')
+      on conflict (email) do update set name = 'GIJIops', password = 'admin123';
+
+      insert into users (id, email, name, role, empresa_id, contacto, telefono, plan, especialidad, password)
+      values ('usr_cliente_normal', 'usuario@soporte.com', 'Usuario Normal (Cliente)', 'empresa', 'emp_1', 'Juan Pérez (Cliente Real)', '+52 55 1234 5678', 'Standard Pro', NULL, 'user123')
+      on conflict (email) do update set name = 'Usuario Normal (Cliente)', password = 'user123';
+    `);
+    console.log('✔ Usuarios Admin GIJIops (admin@soporte.com / admin123) y Cliente Normal (usuario@soporte.com / user123) listos en PostgreSQL.');
 
     console.log('✔ Esquema de base de datos verificado e inicializado correctamente.');
   } catch (err) {
@@ -206,7 +210,7 @@ async function loadMensajesForTickets(ticketIds) {
    ========================================================================== */
 app.post('/api/auth/login', async (req, res) => {
   try {
-    const { email, role } = req.body;
+    const { email, password, role } = req.body;
 
     let result = await pool.query('select * from users where lower(email) = lower($1)', [email]);
 
@@ -219,10 +223,16 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ success: false, message: 'No hay usuarios registrados' });
+      return res.status(404).json({ success: false, message: 'Usuario no encontrado en la base de datos' });
     }
 
-    const user = mapUser(result.rows[0]);
+    const userRow = result.rows[0];
+
+    if (password && userRow.password && userRow.password !== password) {
+      return res.status(401).json({ success: false, message: 'Contraseña incorrecta. Verifica tus credenciales.' });
+    }
+
+    const user = mapUser(userRow);
     return res.json({
       success: true,
       user,
