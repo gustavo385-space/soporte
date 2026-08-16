@@ -1,0 +1,143 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar style="--background: #0D213D; --color: #ffffff;">
+    <ion-title style="font-weight: 700;">
+      <ion-icon name="people-outline" style="vertical-align: middle; margin-right: 8px; color: #2AD9C2;"></ion-icon>
+      Gestión Global de Usuarios
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()" style="--color: #A0AEC0;">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" style="--background: #F4F6FB;">
+  <!-- Header Bar -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <div>
+      <h2 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #0D213D;">Usuarios de la Aplicación</h2>
+      <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #718096;">Administra cuentas de clientes, administradores y técnicos en PostgreSQL.</p>
+    </div>
+    <ion-button (click)="toggleCreateForm()" color="primary" style="--border-radius: 10px;">
+      <ion-icon [name]="showCreateForm ? 'remove-outline' : 'add-outline'" slot="start"></ion-icon>
+      {{ showCreateForm ? 'Cancelar' : 'Nuevo Usuario' }}
+    </ion-button>
+  </div>
+
+  <!-- Create User Form Card -->
+  <div *ngIf="showCreateForm" class="form-card" style="background: white; border-radius: 14px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-bottom: 20px; border: 1px solid #E2E8F0;">
+    <h3 style="margin-top: 0; font-size: 1.1rem; color: #0D213D; font-weight: 700;">Crear Nuevo Usuario en Base de Datos</h3>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+      <div>
+        <label class="field-label">Nombre Completo</label>
+        <ion-input [(ngModel)]="newUser.name" placeholder="Ej. Juan Pérez" class="custom-input"></ion-input>
+      </div>
+
+      <div>
+        <label class="field-label">Correo Electrónico</label>
+        <ion-input [(ngModel)]="newUser.email" type="email" placeholder="ejemplo@empresa.com" class="custom-input"></ion-input>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+      <div>
+        <label class="field-label">Rol del Usuario</label>
+        <ion-select [(ngModel)]="newUser.role" interface="popover" class="custom-input">
+          <ion-select-option value="empresa">Empresa Cliente</ion-select-option>
+          <ion-select-option value="admin">Administrador General</ion-select-option>
+          <ion-select-option value="tecnico">Ingeniero Técnico</ion-select-option>
+        </ion-select>
+      </div>
+
+      <div>
+        <label class="field-label">Teléfono</label>
+        <ion-input [(ngModel)]="newUser.telefono" placeholder="+52 55 0000 0000" class="custom-input"></ion-input>
+      </div>
+    </div>
+
+    <div *ngIf="newUser.role === 'empresa'" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+      <div>
+        <label class="field-label">ID Empresa</label>
+        <ion-input [(ngModel)]="newUser.empresaId" placeholder="emp_1" class="custom-input"></ion-input>
+      </div>
+      <div>
+        <label class="field-label">Plan Contratado</label>
+        <ion-input [(ngModel)]="newUser.plan" placeholder="Enterprise VIP / Business Pro" class="custom-input"></ion-input>
+      </div>
+    </div>
+
+    <div *ngIf="newUser.role === 'admin' || newUser.role === 'tecnico'" style="margin-bottom: 12px;">
+      <label class="field-label">Especialidad / Área</label>
+      <ion-input [(ngModel)]="newUser.especialidad" placeholder="Redes & Servidores Cloud, Ciberseguridad..." class="custom-input"></ion-input>
+    </div>
+
+    <ion-button (click)="createUser()" expand="block" color="success" style="--border-radius: 10px; height: 44px; margin-top: 16px;">
+      <ion-icon name="save-outline" slot="start"></ion-icon>
+      Guardar Usuario en PostgreSQL
+    </ion-button>
+  </div>
+
+  <!-- Filter Segment -->
+  <ion-segment [(ngModel)]="activeFilter" style="background: white; border-radius: 10px; margin-bottom: 16px; padding: 4px;">
+    <ion-segment-button value="todos">Todos</ion-segment-button>
+    <ion-segment-button value="empresa">Empresas</ion-segment-button>
+    <ion-segment-button value="admin">Admins</ion-segment-button>
+    <ion-segment-button value="tecnico">Técnicos</ion-segment-button>
+  </ion-segment>
+
+  <!-- Users List -->
+  <div *ngIf="isLoading" style="text-align: center; padding: 40px 0;">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p style="color: #718096; font-size: 0.9rem; margin-top: 8px;">Cargando usuarios desde PostgreSQL...</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredUsers.length === 0" style="text-align: center; padding: 30px; background: white; border-radius: 14px;">
+    <ion-icon name="person-off-outline" style="font-size: 3rem; color: #A0AEC0;"></ion-icon>
+    <p style="color: #718096;">No se encontraron usuarios en este filtro.</p>
+  </div>
+
+  <div *ngFor="let u of filteredUsers" class="user-card" style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span [ngClass]="{
+          'badge-admin': u.role === 'admin',
+          'badge-empresa': u.role === 'empresa',
+          'badge-tecnico': u.role === 'tecnico'
+        }">
+          {{ u.role.toUpperCase() }}
+        </span>
+        <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: #0D213D;">{{ u.name }}</h4>
+      </div>
+
+      <p style="margin: 2px 0; font-size: 0.85rem; color: #4A5568;">
+        <ion-icon name="mail-outline" style="vertical-align: middle; margin-right: 4px; color: #718096;"></ion-icon>
+        {{ u.email }}
+      </p>
+
+      <p *ngIf="u.telefono" style="margin: 2px 0; font-size: 0.8rem; color: #718096;">
+        <ion-icon name="call-outline" style="vertical-align: middle; margin-right: 4px;"></ion-icon>
+        {{ u.telefono }}
+      </p>
+
+      <p *ngIf="u.plan" style="margin: 2px 0; font-size: 0.8rem; color: #2B6CB0;">
+        Plan: <strong>{{ u.plan }}</strong> (ID Empresa: {{ u.empresaId }})
+      </p>
+
+      <p *ngIf="u.especialidad" style="margin: 2px 0; font-size: 0.8rem; color: #2C7A7B;">
+        Especialidad: <strong>{{ u.especialidad }}</strong>
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 6px;">
+      <ion-button (click)="editUser(u)" fill="clear" color="primary" size="small">
+        <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="deleteUser(u)" fill="clear" color="danger" size="small">
+        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,12 +1,26 @@
 <ion-header class="ion-no-border header-glow">
   <ion-toolbar style="--background: transparent;">
-    <div style="display: flex; align-items: center; gap: 10px; padding-left: 4px;">
-      <div class="brand-mark" style="width: 28px; height: 28px;">
-        <img src="assets/brand/logo-mark.svg" alt="GIJIops" />
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 16px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="brand-mark" style="width: 28px; height: 28px;">
+          <img src="assets/brand/logo-mark.svg" alt="GIJIops" />
+        </div>
+        <ion-title style="color: #0B1C30; font-weight: 800; font-size: 1.15rem; padding-left: 0;">
+          Licenciamiento &amp; Software
+        </ion-title>
       </div>
-      <ion-title style="color: #0B1C30; font-weight: 800; font-size: 1.15rem; padding-left: 0;">
-        Licenciamiento &amp; Software
-      </ion-title>
+
+      <!-- Admin Add License / Catalog Item Buttons -->
+      <div *ngIf="authService.isAdmin">
+        <ion-button *ngIf="activeSegment === 'catalogo'" (click)="addCatalogItemModal()" size="small" color="primary" style="--border-radius: 8px;">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Nuevo en Catálogo
+        </ion-button>
+        <ion-button *ngIf="activeSegment === 'mis_licencias'" (click)="addActiveLicenseModal()" size="small" color="success" style="--border-radius: 8px;">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Asignar Licencia
+        </ion-button>
+      </div>
     </div>
   </ion-toolbar>
 </ion-header>
@@ -31,15 +45,26 @@
     </div>
 
     <div class="catalog-list">
-      <div *ngFor="let item of catalog" class="glass-card catalog-card">
+      <div *ngFor="let item of catalog" class="glass-card catalog-card" style="position: relative;">
         <div style="display: flex; gap: 14px; align-items: flex-start;">
           <div class="icon-box">
             <ion-icon [name]="item.icono || 'cube-outline'" style="font-size: 26px; color: #0D213D;"></ion-icon>
           </div>
           <div style="flex: 1;">
-            <span class="fabricante-chip">
-              {{ item.fabricante }}
-            </span>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="fabricante-chip">{{ item.fabricante }}</span>
+              
+              <!-- Admin Catalog Controls -->
+              <div *ngIf="authService.isAdmin" style="display: flex; gap: 4px;">
+                <ion-button (click)="editCatalogItemModal(item)" fill="clear" size="small" color="primary" style="height: 24px;">
+                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button (click)="deleteCatalogItem(item)" fill="clear" size="small" color="danger" style="height: 24px;">
+                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+
             <h3 style="color: #0B1C30; font-weight: 800; font-size: 1.05rem; margin: 4px 0;">{{ item.nombre }}</h3>
             <p style="color: #44474D; font-size: 0.82rem; margin: 0 0 10px 0;">Incluye: {{ item.incluye }}</p>
             <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #EFF4FF; padding-top: 10px;">
@@ -65,7 +90,20 @@
     <div *ngFor="let lic of activeLicenses" class="glass-card" style="margin: 0 0 14px 0 !important;">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
         <span class="status-badge resuelto">{{ lic.estado }}</span>
-        <span style="color: #00695F; font-weight: 700; font-size: 0.85rem;">Qty: {{ lic.cantidad }} usuarios</span>
+        
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #00695F; font-weight: 700; font-size: 0.85rem;">Qty: {{ lic.cantidad }} usuarios</span>
+
+          <!-- Admin Active License Controls -->
+          <div *ngIf="authService.isAdmin" style="display: flex; gap: 2px;">
+            <ion-button (click)="editActiveLicenseModal(lic)" fill="clear" size="small" color="primary" style="height: 24px;">
+              <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button (click)="deleteActiveLicense(lic)" fill="clear" size="small" color="danger" style="height: 24px;">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
       </div>
 
       <h3 style="color: #0B1C30; font-weight: 800; font-size: 1.1rem; margin: 0 0 8px 0;">{{ lic.nombre }}</h3>

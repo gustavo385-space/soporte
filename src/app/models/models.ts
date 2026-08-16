@@ -12,6 +12,7 @@ export interface User {
   telefono?: string;
   plan?: string;
   especialidad?: string;
+  createdAt?: string;
 }
 
 export interface TicketMessage {

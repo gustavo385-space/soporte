@@ -7,17 +7,24 @@
         </div>
         <div>
           <p style="margin: 0; color: #00695F; font-size: 0.68rem; font-weight: 800; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace;">
-            {{ authService.isEmpresa ? 'PORTAL EMPRESARIAL' : 'PANEL CONTROL IT' }}
+            {{ authService.isEmpresa ? 'PORTAL EMPRESARIAL' : 'PANEL CONTROL ADMIN GLOBAL' }}
           </p>
           <h1 style="margin: 2px 0 0 0; color: #0B1C30; font-size: 1.2rem; font-weight: 800;">
             {{ authService.currentUserValue?.name }}
           </h1>
         </div>
       </div>
-      <ion-chip style="background: #FFFFFF; border: 1px solid #E2E8F0; color: #44474D; font-weight: 600;" routerLink="/login">
-        <ion-icon name="swap-horizontal-outline" style="color: #2AD9C2;"></ion-icon>
-        <ion-label style="font-size: 0.75rem;">Cambiar Rol</ion-label>
-      </ion-chip>
+      <div style="display: flex; gap: 8px;">
+        <ion-chip *ngIf="authService.isAdmin" style="background: #0D213D; color: #2AD9C2; font-weight: 700;" (click)="openUserManagementModal()">
+          <ion-icon name="people-outline" style="color: #2AD9C2;"></ion-icon>
+          <ion-label style="font-size: 0.75rem;">Usuarios</ion-label>
+        </ion-chip>
+
+        <ion-chip style="background: #FFFFFF; border: 1px solid #E2E8F0; color: #44474D; font-weight: 600;" routerLink="/login">
+          <ion-icon name="swap-horizontal-outline" style="color: #2AD9C2;"></ion-icon>
+          <ion-label style="font-size: 0.75rem;">Cambiar Rol</ion-label>
+        </ion-chip>
+      </div>
     </div>
   </ion-toolbar>
 </ion-header>
@@ -89,7 +96,7 @@
   <div *ngIf="!isLoading" class="tickets-list">
     <div *ngFor="let t of filteredTickets" class="ticket-card glass-card" (click)="openTicket(t)">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <span class="ticket-id">{{ t.id }}</span>
+        <span class="ticket-id">{{ t.id }} - {{ t.empresaNombre }}</span>
         <span class="status-badge" [ngClass]="t.estado">
           {{ t.estado.replace('_', ' ') }}
         </span>
@@ -100,7 +107,21 @@
 
       <div class="ticket-footer">
         <span class="category-chip">{{ t.categoria }}</span>
-        <span style="color: #5B6472; font-size: 0.78rem;">
+        
+        <!-- Admin Quick Actions -->
+        <div *ngIf="authService.isAdminOrTech" style="display: flex; gap: 4px; align-items: center;" (click)="$event.stopPropagation()">
+          <ion-button *ngIf="t.estado !== 'resuelto'" (click)="quickChangeStatus($event, t, 'resuelto')" size="small" color="success" fill="solid" style="--border-radius: 6px; font-weight: 700; height: 26px; font-size: 0.7rem;">
+            Finalizar
+          </ion-button>
+          <ion-button *ngIf="t.estado === 'pendiente'" (click)="quickChangeStatus($event, t, 'en_proceso')" size="small" color="warning" fill="solid" style="--border-radius: 6px; font-weight: 700; height: 26px; font-size: 0.7rem;">
+            Procesar
+          </ion-button>
+          <ion-button *ngIf="authService.isAdmin" (click)="deleteTicket($event, t)" size="small" color="danger" fill="clear" style="height: 26px;">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+
+        <span *ngIf="!authService.isAdminOrTech" style="color: #5B6472; font-size: 0.78rem;">
           <ion-icon name="time-outline" style="vertical-align: middle; margin-right: 4px; color: #2AD9C2;"></ion-icon>
           {{ t.fechaCreacion | date:'shortDate' }}
         </span>

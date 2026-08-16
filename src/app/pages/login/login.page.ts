@@ -12,6 +12,7 @@ import { ToastController } from '@ionic/angular';
 export class LoginPage {
   email: string = 'contacto@techcorp.com';
   activeTab: 'empresa' | 'admin' = 'empresa';
+  isLoading: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -29,19 +30,19 @@ export class LoginPage {
   }
 
   async login() {
-    if (this.activeTab === 'empresa') {
-      this.authService.loginAsEmpresa();
-    } else {
-      this.authService.loginAsAdmin();
-    }
+    this.isLoading = true;
+    this.authService.loginWithEmail(this.email, this.activeTab).subscribe(async (res) => {
+      this.isLoading = false;
+      const user = res.user;
 
-    const toast = await this.toastCtrl.create({
-      message: `Sesión iniciada como ${this.authService.currentUserValue?.name}`,
-      duration: 2500,
-      color: 'success'
+      const toast = await this.toastCtrl.create({
+        message: `Bienvenido Administrador General: ${user?.name}`,
+        duration: 2500,
+        color: 'success'
+      });
+      await toast.present();
+
+      this.router.navigate(['/tabs/tab1']);
     });
-    await toast.present();
-
-    this.router.navigate(['/tabs/tab1']);
   }
 }

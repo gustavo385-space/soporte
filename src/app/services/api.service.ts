@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Ticket, LicenseCatalogItem, ActiveLicense, EquipmentItem, DashboardStats } from '../models/models';
+import { Ticket, LicenseCatalogItem, ActiveLicense, EquipmentItem, DashboardStats, User } from '../models/models';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -11,7 +11,36 @@ import { environment } from '../../environments/environment';
 export class ApiService {
   private apiUrl = environment.apiUrl;
 
-  // Fallback Mock Data in case backend is offline
+  // Fallback Mocks
+  private fallbackUsers: User[] = [
+    {
+      id: 'usr_admin_master',
+      email: 'admin@soporte.com',
+      name: 'Alex Rivera (Admin General)',
+      role: 'admin',
+      especialidad: 'Administración Global & DevOps',
+      telefono: '+52 55 5555 0101'
+    },
+    {
+      id: 'usr_empresa_1',
+      email: 'contacto@techcorp.com',
+      name: 'TechCorp Logistics S.A.',
+      role: 'empresa',
+      empresaId: 'emp_1',
+      contacto: 'Ing. Carlos Mendoza',
+      telefono: '+52 55 1234 5678',
+      plan: 'Enterprise VIP'
+    },
+    {
+      id: 'usr_tech_2',
+      email: 'tecnico@soporte.com',
+      name: 'Roberto Silva (Senior Field Tech)',
+      role: 'tecnico',
+      especialidad: 'Mantenimiento Hardware & Licencias',
+      telefono: '+52 55 5555 0202'
+    }
+  ];
+
   private fallbackTickets: Ticket[] = [
     {
       id: 'TCK-8901',
@@ -45,22 +74,6 @@ export class ApiService {
       mensajes: [
         { autor: 'Ing. Carlos Mendoza', rol: 'empresa', mensaje: 'Adjunto requerimiento firmado.', fecha: new Date(Date.now() - 86400000).toISOString() }
       ]
-    },
-    {
-      id: 'TCK-8903',
-      empresaId: 'emp_2',
-      empresaNombre: 'InnovaTech Solutions',
-      titulo: 'Mantenimiento preventivo para 15 Laptops Dell XPS',
-      descripcion: 'Limpieza física de disipadores y actualización de firmware.',
-      categoria: 'Mantenimiento',
-      prioridad: 'baja',
-      estado: 'resuelto',
-      tecnicoAsignado: 'Roberto Silva',
-      fechaCreacion: new Date(Date.now() - 172800000).toISOString(),
-      fechaActualizacion: new Date(Date.now() - 86400000).toISOString(),
-      mensajes: [
-        { autor: 'Roberto Silva', rol: 'tecnico', mensaje: 'Mantenimiento completado.', fecha: new Date(Date.now() - 86400000).toISOString() }
-      ]
     }
   ];
 
@@ -82,15 +95,6 @@ export class ApiService {
       precioUnitario: '$24.50 /dispositivo/año',
       incluye: 'Protección Ransomware, Control Web, EDR',
       icono: 'shield-checkmark-outline'
-    },
-    {
-      id: 'lic_3',
-      nombre: 'Windows Server 2025 Datacenter',
-      tipo: 'Licencia Perpetua',
-      fabricante: 'Microsoft',
-      precioUnitario: '$6,150.00 /16 Cores',
-      incluye: 'Máquinas virtuales ilimitadas, Storage Spaces Direct',
-      icono: 'server-outline'
     }
   ];
 
@@ -102,15 +106,6 @@ export class ApiService {
       cantidad: 25,
       claveLicencia: 'XXXXX-MW982-PL019-KJS88',
       fechaVencimiento: '2026-09-15',
-      estado: 'Activa'
-    },
-    {
-      id: 'act_lic_102',
-      empresaId: 'emp_1',
-      nombre: 'Kaspersky Endpoint Security',
-      cantidad: 40,
-      claveLicencia: 'KASP-99201-EC911-PRO88',
-      fechaVencimiento: '2026-12-01',
       estado: 'Activa'
     }
   ];
@@ -127,23 +122,64 @@ export class ApiService {
       ultimoMantenimiento: '2026-06-15',
       proximoMantenimiento: '2026-12-15',
       estado: 'Operativo'
-    },
-    {
-      id: 'eq_02',
-      empresaId: 'emp_1',
-      codigoActivo: 'EQ-SW-02',
-      tipo: 'Switch Layer 3',
-      marcaModelo: 'Cisco Catalyst 9300 48-Port',
-      ubicacion: 'Rack B-01 (Piso 2)',
-      especificaciones: '48P PoE+ / Stackwise',
-      ultimoMantenimiento: '2026-05-10',
-      proximoMantenimiento: '2026-11-10',
-      estado: 'Operativo'
     }
   ];
 
   constructor(private http: HttpClient) {}
 
+  /* ==========================================
+     USERS API
+     ========================================== */
+  getUsers(): Observable<{ success: boolean; users: User[] }> {
+    return this.http.get<{ success: boolean; users: User[] }>(`${this.apiUrl}/users`).pipe(
+      catchError(() => of({ success: true, users: this.fallbackUsers }))
+    );
+  }
+
+  createUser(userData: Partial<User>): Observable<{ success: boolean; user: User }> {
+    return this.http.post<{ success: boolean; user: User }>(`${this.apiUrl}/users`, userData).pipe(
+      catchError(() => {
+        const newU: User = {
+          id: `usr_${userData.role || 'empresa'}_${Date.now()}`,
+          email: userData.email || '',
+          name: userData.name || '',
+          role: userData.role || 'empresa',
+          empresaId: userData.empresaId,
+          contacto: userData.contacto,
+          telefono: userData.telefono,
+          plan: userData.plan,
+          especialidad: userData.especialidad
+        };
+        this.fallbackUsers.unshift(newU);
+        return of({ success: true, user: newU });
+      })
+    );
+  }
+
+  updateUser(id: string, userData: Partial<User>): Observable<{ success: boolean; user: User }> {
+    return this.http.put<{ success: boolean; user: User }>(`${this.apiUrl}/users/${id}`, userData).pipe(
+      catchError(() => {
+        const index = this.fallbackUsers.findIndex(u => u.id === id);
+        if (index !== -1) {
+          this.fallbackUsers[index] = { ...this.fallbackUsers[index], ...userData };
+        }
+        return of({ success: true, user: this.fallbackUsers[index] });
+      })
+    );
+  }
+
+  deleteUser(id: string): Observable<{ success: boolean; message: string }> {
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/users/${id}`).pipe(
+      catchError(() => {
+        this.fallbackUsers = this.fallbackUsers.filter(u => u.id !== id);
+        return of({ success: true, message: 'Usuario eliminado' });
+      })
+    );
+  }
+
+  /* ==========================================
+     TICKETS API
+     ========================================== */
   getTickets(empresaId?: string, role?: string): Observable<{ success: boolean; tickets: Ticket[] }> {
     let url = `${this.apiUrl}/tickets`;
     if (empresaId || role) {
@@ -194,6 +230,18 @@ export class ApiService {
     );
   }
 
+  updateTicket(id: string, ticketData: Partial<Ticket>): Observable<{ success: boolean; ticket: Ticket }> {
+    return this.http.put<{ success: boolean; ticket: Ticket }>(`${this.apiUrl}/tickets/${id}`, ticketData).pipe(
+      catchError(() => {
+        const target = this.fallbackTickets.find(t => t.id === id);
+        if (target) {
+          Object.assign(target, ticketData);
+        }
+        return of({ success: true, ticket: target! });
+      })
+    );
+  }
+
   updateTicketState(id: string, estado: string, tecnicoAsignado?: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/tickets/${id}/estado`, { estado, tecnicoAsignado }).pipe(
       catchError(() => {
@@ -203,6 +251,15 @@ export class ApiService {
           if (tecnicoAsignado) target.tecnicoAsignado = tecnicoAsignado;
         }
         return of({ success: true, ticket: target });
+      })
+    );
+  }
+
+  deleteTicket(id: string): Observable<{ success: boolean; message: string }> {
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/tickets/${id}`).pipe(
+      catchError(() => {
+        this.fallbackTickets = this.fallbackTickets.filter(t => t.id !== id);
+        return of({ success: true, message: 'Ticket eliminado' });
       })
     );
   }
@@ -224,15 +281,99 @@ export class ApiService {
     );
   }
 
+  /* ==========================================
+     LICENSES CATALOG API
+     ========================================== */
   getLicensesCatalog(): Observable<{ success: boolean; catalog: LicenseCatalogItem[] }> {
     return this.http.get<{ success: boolean; catalog: LicenseCatalogItem[] }>(`${this.apiUrl}/licenses/catalog`).pipe(
       catchError(() => of({ success: true, catalog: this.fallbackCatalog }))
     );
   }
 
+  createCatalogLicense(itemData: Partial<LicenseCatalogItem>): Observable<{ success: boolean; catalogItem: LicenseCatalogItem }> {
+    return this.http.post<{ success: boolean; catalogItem: LicenseCatalogItem }>(`${this.apiUrl}/licenses/catalog`, itemData).pipe(
+      catchError(() => {
+        const item: LicenseCatalogItem = {
+          id: `lic_${Date.now()}`,
+          nombre: itemData.nombre || '',
+          tipo: itemData.tipo || 'Suscripción',
+          fabricante: itemData.fabricante || 'Genérico',
+          precioUnitario: itemData.precioUnitario || '$0.00',
+          incluye: itemData.incluye || '',
+          icono: itemData.icono || 'key-outline'
+        };
+        this.fallbackCatalog.push(item);
+        return of({ success: true, catalogItem: item });
+      })
+    );
+  }
+
+  updateCatalogLicense(id: string, itemData: Partial<LicenseCatalogItem>): Observable<{ success: boolean; catalogItem: LicenseCatalogItem }> {
+    return this.http.put<{ success: boolean; catalogItem: LicenseCatalogItem }>(`${this.apiUrl}/licenses/catalog/${id}`, itemData).pipe(
+      catchError(() => {
+        const idx = this.fallbackCatalog.findIndex(c => c.id === id);
+        if (idx !== -1) {
+          this.fallbackCatalog[idx] = { ...this.fallbackCatalog[idx], ...itemData };
+        }
+        return of({ success: true, catalogItem: this.fallbackCatalog[idx] });
+      })
+    );
+  }
+
+  deleteCatalogLicense(id: string): Observable<{ success: boolean; message: string }> {
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/licenses/catalog/${id}`).pipe(
+      catchError(() => {
+        this.fallbackCatalog = this.fallbackCatalog.filter(c => c.id !== id);
+        return of({ success: true, message: 'Item eliminado' });
+      })
+    );
+  }
+
+  /* ==========================================
+     ACTIVE LICENSES API
+     ========================================== */
   getActiveLicenses(empresaId?: string): Observable<{ success: boolean; licenses: ActiveLicense[] }> {
     return this.http.get<{ success: boolean; licenses: ActiveLicense[] }>(`${this.apiUrl}/licenses/active?empresaId=${empresaId || ''}`).pipe(
       catchError(() => of({ success: true, licenses: this.fallbackActiveLicenses }))
+    );
+  }
+
+  createActiveLicense(licenseData: Partial<ActiveLicense>): Observable<{ success: boolean; license: ActiveLicense }> {
+    return this.http.post<{ success: boolean; license: ActiveLicense }>(`${this.apiUrl}/licenses/active`, licenseData).pipe(
+      catchError(() => {
+        const lic: ActiveLicense = {
+          id: `act_lic_${Date.now()}`,
+          empresaId: licenseData.empresaId || 'emp_1',
+          nombre: licenseData.nombre || '',
+          cantidad: licenseData.cantidad || 1,
+          claveLicencia: licenseData.claveLicencia || 'XXXXX-XXXXX',
+          fechaVencimiento: licenseData.fechaVencimiento || '2027-12-31',
+          estado: licenseData.estado || 'Activa'
+        };
+        this.fallbackActiveLicenses.push(lic);
+        return of({ success: true, license: lic });
+      })
+    );
+  }
+
+  updateActiveLicense(id: string, licenseData: Partial<ActiveLicense>): Observable<{ success: boolean; license: ActiveLicense }> {
+    return this.http.put<{ success: boolean; license: ActiveLicense }>(`${this.apiUrl}/licenses/active/${id}`, licenseData).pipe(
+      catchError(() => {
+        const idx = this.fallbackActiveLicenses.findIndex(l => l.id === id);
+        if (idx !== -1) {
+          this.fallbackActiveLicenses[idx] = { ...this.fallbackActiveLicenses[idx], ...licenseData };
+        }
+        return of({ success: true, license: this.fallbackActiveLicenses[idx] });
+      })
+    );
+  }
+
+  deleteActiveLicense(id: string): Observable<{ success: boolean; message: string }> {
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/licenses/active/${id}`).pipe(
+      catchError(() => {
+        this.fallbackActiveLicenses = this.fallbackActiveLicenses.filter(l => l.id !== id);
+        return of({ success: true, message: 'Licencia activa eliminada' });
+      })
     );
   }
 
@@ -252,6 +393,9 @@ export class ApiService {
     );
   }
 
+  /* ==========================================
+     EQUIPMENT API
+     ========================================== */
   getEquipment(empresaId?: string): Observable<{ success: boolean; equipment: EquipmentItem[] }> {
     return this.http.get<{ success: boolean; equipment: EquipmentItem[] }>(`${this.apiUrl}/equipment?empresaId=${empresaId || ''}`).pipe(
       catchError(() => of({ success: true, equipment: this.fallbackEquipment }))
@@ -271,7 +415,7 @@ export class ApiService {
           especificaciones: equipData.especificaciones,
           ultimoMantenimiento: new Date().toISOString().split('T')[0],
           proximoMantenimiento: '2026-12-31',
-          estado: 'Operativo'
+          estado: equipData.estado || 'Operativo'
         };
         this.fallbackEquipment.push(newEq);
         return of({ success: true, equipment: newEq });
@@ -279,6 +423,30 @@ export class ApiService {
     );
   }
 
+  updateEquipment(id: string, equipData: Partial<EquipmentItem>): Observable<{ success: boolean; equipment: EquipmentItem }> {
+    return this.http.put<{ success: boolean; equipment: EquipmentItem }>(`${this.apiUrl}/equipment/${id}`, equipData).pipe(
+      catchError(() => {
+        const idx = this.fallbackEquipment.findIndex(e => e.id === id);
+        if (idx !== -1) {
+          this.fallbackEquipment[idx] = { ...this.fallbackEquipment[idx], ...equipData };
+        }
+        return of({ success: true, equipment: this.fallbackEquipment[idx] });
+      })
+    );
+  }
+
+  deleteEquipment(id: string): Observable<{ success: boolean; message: string }> {
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/equipment/${id}`).pipe(
+      catchError(() => {
+        this.fallbackEquipment = this.fallbackEquipment.filter(e => e.id !== id);
+        return of({ success: true, message: 'Equipo eliminado' });
+      })
+    );
+  }
+
+  /* ==========================================
+     STATS API
+     ========================================== */
   getStats(): Observable<{ success: boolean; stats: DashboardStats }> {
     return this.http.get<{ success: boolean; stats: DashboardStats }>(`${this.apiUrl}/stats`).pipe(
       catchError(() => {

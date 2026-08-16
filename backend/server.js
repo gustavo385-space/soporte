@@ -4,15 +4,108 @@ const pool = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const HOST = '0.0.0.0'; // Escucha en todas las interfaces de red, no solo localhost,
-                         // así tu teléfono en la misma WiFi puede alcanzarlo por la IP de tu PC
+const HOST = '0.0.0.0';
 
 app.use(cors());
 app.use(express.json());
 
 /* ==========================================================================
-   Helpers - convierten filas de Postgres (snake_case) al shape que ya
-   consume el frontend Angular (camelCase), para no tener que tocarlo.
+   AUTO-INITIALIZE TABLES IF NOT EXISTS (SUPABASE / POSTGRES)
+   ========================================================================== */
+async function initDb() {
+  try {
+    await pool.query(`
+      create table if not exists users (
+        id             text primary key,
+        email          text not null unique,
+        name           text not null,
+        role           text not null check (role in ('empresa', 'admin', 'tecnico')),
+        empresa_id     text,
+        contacto       text,
+        telefono       text,
+        plan           text,
+        especialidad   text,
+        created_at     timestamptz not null default now()
+      );
+
+      create table if not exists tickets (
+        id                   text primary key,
+        empresa_id           text not null,
+        empresa_nombre       text not null,
+        titulo               text not null,
+        descripcion          text not null,
+        categoria            text not null default 'General',
+        prioridad            text not null default 'media' check (prioridad in ('baja','media','alta','critico')),
+        estado               text not null default 'pendiente' check (estado in ('pendiente','en_proceso','resuelto')),
+        tecnico_asignado     text default 'Sin Asignar',
+        fecha_creacion       timestamptz not null default now(),
+        fecha_actualizacion  timestamptz not null default now()
+      );
+
+      create table if not exists ticket_messages (
+        id          bigint generated always as identity primary key,
+        ticket_id   text not null references tickets(id) on delete cascade,
+        autor       text not null,
+        rol         text not null check (rol in ('empresa','admin','tecnico')),
+        mensaje     text not null,
+        fecha       timestamptz not null default now()
+      );
+
+      create table if not exists licenses_catalog (
+        id                text primary key,
+        nombre            text not null,
+        tipo              text,
+        fabricante        text,
+        precio_unitario   text,
+        incluye           text,
+        icono             text
+      );
+
+      create table if not exists active_licenses (
+        id                 text primary key,
+        empresa_id         text not null,
+        nombre             text not null,
+        cantidad           integer not null default 1,
+        clave_licencia     text,
+        fecha_vencimiento  date,
+        estado             text not null default 'Activa'
+      );
+
+      create table if not exists equipment (
+        id                     text primary key,
+        empresa_id             text not null,
+        codigo_activo          text not null,
+        tipo                   text,
+        marca_modelo           text,
+        ubicacion              text,
+        especificaciones       text,
+        ultimo_mantenimiento   date,
+        proximo_mantenimiento  date,
+        estado                 text not null default 'Operativo'
+      );
+    `);
+
+    // Asegurar usuario Admin General por defecto
+    const userCheck = await pool.query("select * from users where role = 'admin'");
+    if (userCheck.rows.length === 0) {
+      await pool.query(`
+        insert into users (id, email, name, role, empresa_id, contacto, telefono, plan, especialidad)
+        values ('usr_admin_master', 'admin@soporte.com', 'Alex Rivera (Admin General)', 'admin', NULL, 'Administrador Principal', '+52 55 5555 0101', 'Super Admin', 'Administración Global & DevOps')
+        on conflict (id) do nothing;
+      `);
+      console.log('✔ Usuario Admin Master creado en PostgreSQL.');
+    }
+
+    console.log('✔ Esquema de base de datos verificado e inicializado correctamente.');
+  } catch (err) {
+    console.error('⚠ Error inicializando las tablas de PostgreSQL:', err.message);
+  }
+}
+
+initDb();
+
+/* ==========================================================================
+   Helpers - conversores snake_case <-> camelCase
    ========================================================================== */
 function mapUser(row) {
   return {
@@ -25,6 +118,7 @@ function mapUser(row) {
     telefono: row.telefono,
     plan: row.plan,
     especialidad: row.especialidad,
+    createdAt: row.created_at,
   };
 }
 
@@ -141,7 +235,81 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 /* ==========================================================================
-   TICKETS ENDPOINTS
+   USERS ENDPOINTS (CRUD Completo para Admin)
+   ========================================================================== */
+app.get('/api/users', async (req, res) => {
+  try {
+    const { rows } = await pool.query('select * from users order by created_at desc');
+    return res.json({ success: true, users: rows.map(mapUser) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error interno obteniendo usuarios' });
+  }
+});
+
+app.post('/api/users', async (req, res) => {
+  try {
+    const { email, name, role, empresaId, contacto, telefono, plan, especialidad } = req.body;
+    const id = `usr_${role}_${Date.now()}`;
+
+    const { rows } = await pool.query(
+      `insert into users (id, email, name, role, empresa_id, contacto, telefono, plan, especialidad)
+       values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       returning *`,
+      [id, email, name, role || 'empresa', empresaId || null, contacto || null, telefono || null, plan || null, especialidad || null]
+    );
+
+    return res.status(201).json({ success: true, user: mapUser(rows[0]) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: err.message || 'Error al crear usuario' });
+  }
+});
+
+app.put('/api/users/:id', async (req, res) => {
+  try {
+    const { email, name, role, empresaId, contacto, telefono, plan, especialidad } = req.body;
+    const { rows } = await pool.query(
+      `update users
+       set email = coalesce($2, email),
+           name = coalesce($3, name),
+           role = coalesce($4, role),
+           empresa_id = coalesce($5, empresa_id),
+           contacto = coalesce($6, contacto),
+           telefono = coalesce($7, telefono),
+           plan = coalesce($8, plan),
+           especialidad = coalesce($9, especialidad)
+       where id = $1
+       returning *`,
+      [req.params.id, email, name, role, empresaId, contacto, telefono, plan, especialidad]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+    }
+
+    return res.json({ success: true, user: mapUser(rows[0]) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error actualizando usuario' });
+  }
+});
+
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    const { rows } = await pool.query('delete from users where id = $1 returning *', [req.params.id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+    }
+    return res.json({ success: true, message: 'Usuario eliminado correctamente', user: mapUser(rows[0]) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error eliminando usuario' });
+  }
+});
+
+/* ==========================================================================
+   TICKETS ENDPOINTS (CRUD Completo)
    ========================================================================== */
 app.get('/api/tickets', async (req, res) => {
   try {
@@ -225,6 +393,35 @@ app.post('/api/tickets', async (req, res) => {
   }
 });
 
+app.put('/api/tickets/:id', async (req, res) => {
+  try {
+    const { titulo, descripcion, categoria, prioridad, estado, tecnicoAsignado } = req.body;
+    const { rows } = await pool.query(
+      `update tickets
+       set titulo = coalesce($2, titulo),
+           descripcion = coalesce($3, descripcion),
+           categoria = coalesce($4, categoria),
+           prioridad = coalesce($5, prioridad),
+           estado = coalesce($6, estado),
+           tecnico_asignado = coalesce($7, tecnico_asignado),
+           fecha_actualizacion = now()
+       where id = $1
+       returning *`,
+      [req.params.id, titulo, descripcion, categoria, prioridad, estado, tecnicoAsignado]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Ticket no encontrado' });
+    }
+
+    const mensajesByTicket = await loadMensajesForTickets([req.params.id]);
+    return res.json({ success: true, ticket: mapTicket(rows[0], mensajesByTicket[req.params.id] || []) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error actualizando ticket' });
+  }
+});
+
 app.put('/api/tickets/:id/estado', async (req, res) => {
   try {
     const { estado, tecnicoAsignado } = req.body;
@@ -232,7 +429,8 @@ app.put('/api/tickets/:id/estado', async (req, res) => {
     const { rows } = await pool.query(
       `update tickets
        set estado = coalesce($2, estado),
-           tecnico_asignado = coalesce($3, tecnico_asignado)
+           tecnico_asignado = coalesce($3, tecnico_asignado),
+           fecha_actualizacion = now()
        where id = $1
        returning *`,
       [req.params.id, estado || null, tecnicoAsignado || null]
@@ -248,6 +446,19 @@ app.put('/api/tickets/:id/estado', async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
+app.delete('/api/tickets/:id', async (req, res) => {
+  try {
+    const { rows } = await pool.query('delete from tickets where id = $1 returning *', [req.params.id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Ticket no encontrado' });
+    }
+    return res.json({ success: true, message: 'Ticket eliminado correctamente' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error eliminando ticket' });
   }
 });
 
@@ -280,7 +491,7 @@ app.post('/api/tickets/:id/mensajes', async (req, res) => {
 });
 
 /* ==========================================================================
-   LICENSES ENDPOINTS
+   LICENSES ENDPOINTS (Active Licenses & Catalog CRUD)
    ========================================================================== */
 app.get('/api/licenses/catalog', async (req, res) => {
   try {
@@ -289,6 +500,65 @@ app.get('/api/licenses/catalog', async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
+app.post('/api/licenses/catalog', async (req, res) => {
+  try {
+    const { nombre, tipo, fabricante, precioUnitario, incluye, icono } = req.body;
+    const id = `lic_${Date.now()}`;
+
+    const { rows } = await pool.query(
+      `insert into licenses_catalog (id, nombre, tipo, fabricante, precio_unitario, incluye, icono)
+       values ($1, $2, $3, $4, $5, $6, $7)
+       returning *`,
+      [id, nombre, tipo || 'Suscripción', fabricante || 'Genérico', precioUnitario || '$0.00', incluye || '', icono || 'key-outline']
+    );
+
+    return res.status(201).json({ success: true, catalogItem: mapLicenseCatalog(rows[0]) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error agregando item al catálogo' });
+  }
+});
+
+app.put('/api/licenses/catalog/:id', async (req, res) => {
+  try {
+    const { nombre, tipo, fabricante, precioUnitario, incluye, icono } = req.body;
+    const { rows } = await pool.query(
+      `update licenses_catalog
+       set nombre = coalesce($2, nombre),
+           tipo = coalesce($3, tipo),
+           fabricante = coalesce($4, fabricante),
+           precio_unitario = coalesce($5, precio_unitario),
+           incluye = coalesce($6, incluye),
+           icono = coalesce($7, icono)
+       where id = $1
+       returning *`,
+      [req.params.id, nombre, tipo, fabricante, precioUnitario, incluye, icono]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Item de catálogo no encontrado' });
+    }
+
+    return res.json({ success: true, catalogItem: mapLicenseCatalog(rows[0]) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error editando item de catálogo' });
+  }
+});
+
+app.delete('/api/licenses/catalog/:id', async (req, res) => {
+  try {
+    const { rows } = await pool.query('delete from licenses_catalog where id = $1 returning *', [req.params.id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Item de catálogo no encontrado' });
+    }
+    return res.json({ success: true, message: 'Item de catálogo eliminado' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error eliminando item de catálogo' });
   }
 });
 
@@ -306,6 +576,65 @@ app.get('/api/licenses/active', async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
+app.post('/api/licenses/active', async (req, res) => {
+  try {
+    const { empresaId, nombre, cantidad, claveLicencia, fechaVencimiento, estado } = req.body;
+    const id = `act_lic_${Date.now()}`;
+
+    const { rows } = await pool.query(
+      `insert into active_licenses (id, empresa_id, nombre, cantidad, clave_licencia, fecha_vencimiento, estado)
+       values ($1, $2, $3, $4, $5, $6, $7)
+       returning *`,
+      [id, empresaId || 'emp_1', nombre, cantidad || 1, claveLicencia || 'N/A', fechaVencimiento || '2027-12-31', estado || 'Activa']
+    );
+
+    return res.status(201).json({ success: true, license: mapActiveLicense(rows[0]) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error creando licencia activa' });
+  }
+});
+
+app.put('/api/licenses/active/:id', async (req, res) => {
+  try {
+    const { empresaId, nombre, cantidad, claveLicencia, fechaVencimiento, estado } = req.body;
+    const { rows } = await pool.query(
+      `update active_licenses
+       set empresa_id = coalesce($2, empresa_id),
+           nombre = coalesce($3, nombre),
+           cantidad = coalesce($4, cantidad),
+           clave_licencia = coalesce($5, clave_licencia),
+           fecha_vencimiento = coalesce($6, fecha_vencimiento),
+           estado = coalesce($7, estado)
+       where id = $1
+       returning *`,
+      [req.params.id, empresaId, nombre, cantidad, claveLicencia, fechaVencimiento, estado]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Licencia activa no encontrada' });
+    }
+
+    return res.json({ success: true, license: mapActiveLicense(rows[0]) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error actualizando licencia activa' });
+  }
+});
+
+app.delete('/api/licenses/active/:id', async (req, res) => {
+  try {
+    const { rows } = await pool.query('delete from active_licenses where id = $1 returning *', [req.params.id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Licencia activa no encontrada' });
+    }
+    return res.json({ success: true, message: 'Licencia activa eliminada' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error eliminando licencia activa' });
   }
 });
 
@@ -347,7 +676,7 @@ app.post('/api/licenses/request', async (req, res) => {
 });
 
 /* ==========================================================================
-   EQUIPMENT ENDPOINTS
+   EQUIPMENT ENDPOINTS (CRUD Completo)
    ========================================================================== */
 app.get('/api/equipment', async (req, res) => {
   try {
@@ -368,22 +697,64 @@ app.get('/api/equipment', async (req, res) => {
 
 app.post('/api/equipment', async (req, res) => {
   try {
-    const { empresaId, codigoActivo, tipo, marcaModelo, ubicacion, especificaciones } = req.body;
+    const { empresaId, codigoActivo, tipo, marcaModelo, ubicacion, especificaciones, estado } = req.body;
     const id = `eq_${Date.now()}`;
     const codigo = codigoActivo || `EQ-HW-${Math.floor(100 + Math.random() * 900)}`;
 
     const { rows } = await pool.query(
       `insert into equipment (id, empresa_id, codigo_activo, tipo, marca_modelo, ubicacion, especificaciones,
          ultimo_mantenimiento, proximo_mantenimiento, estado)
-       values ($1, $2, $3, $4, $5, $6, $7, current_date, current_date + interval '180 days', 'Operativo')
+       values ($1, $2, $3, $4, $5, $6, $7, current_date, current_date + interval '180 days', $8)
        returning *`,
-      [id, empresaId || 'emp_1', codigo, tipo, marcaModelo, ubicacion, especificaciones]
+      [id, empresaId || 'emp_1', codigo, tipo, marcaModelo, ubicacion, especificaciones, estado || 'Operativo']
     );
 
     return res.status(201).json({ success: true, equipment: mapEquipment(rows[0]) });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
+app.put('/api/equipment/:id', async (req, res) => {
+  try {
+    const { empresaId, codigoActivo, tipo, marcaModelo, ubicacion, especificaciones, estado, proximoMantenimiento } = req.body;
+    const { rows } = await pool.query(
+      `update equipment
+       set empresa_id = coalesce($2, empresa_id),
+           codigo_activo = coalesce($3, codigo_activo),
+           tipo = coalesce($4, tipo),
+           marca_modelo = coalesce($5, marca_modelo),
+           ubicacion = coalesce($6, ubicacion),
+           especificaciones = coalesce($7, especificaciones),
+           estado = coalesce($8, estado),
+           proximo_mantenimiento = coalesce($9, proximo_mantenimiento)
+       where id = $1
+       returning *`,
+      [req.params.id, empresaId, codigoActivo, tipo, marcaModelo, ubicacion, especificaciones, estado, proximoMantenimiento]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Equipo no encontrado' });
+    }
+
+    return res.json({ success: true, equipment: mapEquipment(rows[0]) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error actualizando equipo' });
+  }
+});
+
+app.delete('/api/equipment/:id', async (req, res) => {
+  try {
+    const { rows } = await pool.query('delete from equipment where id = $1 returning *', [req.params.id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Equipo no encontrado' });
+    }
+    return res.json({ success: true, message: 'Equipo eliminado del inventario' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: 'Error eliminando equipo' });
   }
 });
 
@@ -417,7 +788,7 @@ app.get('/api/stats', async (req, res) => {
 });
 
 /* ==========================================================================
-   HEALTHCHECK - útil para confirmar que la conexión a Supabase funciona
+   HEALTHCHECK
    ========================================================================== */
 app.get('/api/health', async (req, res) => {
   try {

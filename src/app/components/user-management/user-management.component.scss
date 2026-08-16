@@ -1,0 +1,46 @@
+.field-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4A5568;
+  margin-bottom: 4px;
+}
+
+.custom-input {
+  --background: #F7FAFC;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.badge-admin {
+  background: #EBF8FF;
+  color: #2B6CB0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #BEE3F8;
+}
+
+.badge-empresa {
+  background: #F0FFF4;
+  color: #2F855A;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #C6F6D5;
+}
+
+.badge-tecnico {
+  background: #FAF5FF;
+  color: #6B46C1;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #E9D8FD;
+}

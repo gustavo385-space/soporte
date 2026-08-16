@@ -6,6 +6,15 @@
     <ion-title style="color: #0B1C30; font-weight: 700; font-size: 1rem;">
       Detalle del Ticket {{ ticketId }}
     </ion-title>
+
+    <ion-buttons slot="end" *ngIf="authService.isAdmin">
+      <ion-button (click)="editarTicketAdmin()" style="--color: #0D213D;">
+        <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button (click)="eliminarTicketAdmin()" style="--color: #E53E3E;">
+        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -48,7 +57,7 @@
     <!-- Admin Technician Controls (Show only if Admin/Tech) -->
     <div *ngIf="authService.isAdminOrTech" class="glass-card" style="margin-bottom: 20px; border-left: 4px solid #2AD9C2;">
       <h3 style="color: #00695F; font-size: 0.95rem; font-weight: 700; margin: 0 0 10px 0;">
-        Panel Técnico - Cambiar Estado
+        Panel Control Admin - Comprobar & Finalizar Ticket
       </h3>
       <div style="display: flex; gap: 8px; flex-wrap: wrap;">
         <ion-button size="small" fill="outline" color="warning" (click)="cambiarEstado('pendiente')">
@@ -58,7 +67,7 @@
           En Proceso
         </ion-button>
         <ion-button size="small" fill="solid" color="success" (click)="cambiarEstado('resuelto')">
-          Marcar Resuelto
+          ✓ Marcar como Resuelto (Finalizar)
         </ion-button>
       </div>
     </div>
